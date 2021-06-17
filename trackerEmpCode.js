@@ -23,7 +23,7 @@ const viewAndManage = () => {
   inquirer.prompt({
     name: 'action',
     type: 'list',
-    message: '', 
+    message: 'What would you like to do?', 
     choices: [
       {
         name: "View All Employees",
@@ -142,8 +142,52 @@ const employeesByManager = () => {
 }
 
 const addEmployee = () => {
+inquirer.prompt([
+  {
+    name: "first",
+    type: "input",
+    message: "What is the employee's first name?"
 
-}
+  },
+  {
+    name: "last",
+    type: "input",
+    message: "What is the employee's last name?"
+
+  },
+  {
+    name: "role",
+    type: "list",
+    message: "What is the employee's role?",
+    choices: ["Sales Lead", "Salesperson", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead"]
+
+  },
+  {
+    name: "manager",
+    type: "rawlist",
+    message: "Who is the employee's manager?",
+    choices() {
+      const managerArray = [];
+    }
+  
+  }
+])
+.then((answers) => {
+  connection.query('INSERT INTO employee SET ?',
+  {
+    first_name: answer.first,
+    last_name: answer.last,
+    role_id: answer.role,
+    manager_id: answer.manager || null,
+  },
+  (err) => {
+    if (err) throw err;
+    console.log('Your employee was successfully added');
+    viewAndManage();
+  }
+  );
+});
+};
 
 const removeEmployee = () => {
 
