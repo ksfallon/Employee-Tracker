@@ -16,10 +16,10 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
   if (err) throw err;
-  runSearch();
+  viewAndManage();
 });
 
-const runEmpSearch = () => {
+const viewAndManage = () => {
   inquirer.prompt({
     name: 'action',
     type: 'list',
@@ -83,6 +83,82 @@ const runEmpSearch = () => {
       }
     ],
   })
+  .then((answers) => {
+    switch (answers.action) {
+      case 'View All Employees':
+        employeesSearch();
+        break;
+      
+      case 'View All Employees By Department':
+        employeesByDept();
+        break;
+
+      case 'View All Employees By Manager':
+        employeesByManager();
+        break;
+
+      case 'Add Employee':
+        addEmployee();
+        break;
+    
+      case 'Remove Employee':
+        removeEmployee();
+        break;
+
+      case 'View All Departments':
+        viewDepartments();
+        break;
+
+      case 'Add Department':
+        addDepartment();
+        break;
+
+      case 'Remove Department':
+        removeDepartment();
+        break;
+
+      case 'Quit':
+        connection.end();
+        break;
+
+      default:
+        console.log(`Invalid action: ${answer.action}`);
+        break;
+      
+    }
+  })
+}
+
+const employeesSearch = () => {
+
+}
+
+const employeesByDept = () => {
+
+}
+
+const employeesByManager = () => {
+
+}
+
+const addEmployee = () => {
+
+}
+
+const removeEmployee = () => {
+
+}
+
+const viewDepartments = () => {
+
+}
+
+const addDepartment = () => {
+
+}
+
+const removeDepartment = () => {
+
 }
 
 // PROMPT SHOULD ALLOW USER TO DO AT LEAST:
