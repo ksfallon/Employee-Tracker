@@ -6,3 +6,13 @@ VALUE ("Sales Lead", 80000.00, 1), ("Salesperson", 70000.00, 1), ("Lead Engineer
 
 INSERT into department (name)
 VALUE ("Sales"), ("Engineer"), ("Finance"), ("Legal");
+
+SELECT 
+    CONCAT(m.lastName, ', ', m.firstName) AS Manager,
+    CONCAT(e.lastName, ', ', e.firstName) AS 'Direct report'
+FROM
+    employees e
+INNER JOIN employees m ON 
+    m.employeeNumber = e.reportsTo
+ORDER BY 
+    Manager;
