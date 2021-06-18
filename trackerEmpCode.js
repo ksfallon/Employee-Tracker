@@ -21,8 +21,8 @@ connection.connect((err) => {
 
 const viewAndManage = () => {
   inquirer.prompt({
-    name: 'action',
     type: 'list',
+    name: 'action',
     message: 'What would you like to do?', 
     choices: [
       {
@@ -49,6 +49,7 @@ const viewAndManage = () => {
         name: "Update Employee Role",
         value: "UPDATE_EMPLOYEE_ROLE"
       },
+      // ON DELETE SET NULL for manager id the rest or ON DELETE CASACADE**
       {
         name: "Update Employee Manager",
         value: "UPDATE_EMPLOYEE_MANAGER"
@@ -85,7 +86,7 @@ const viewAndManage = () => {
   })
   .then((answers) => {
     switch (answers.action) {
-      case 'View All Employees':
+      case 'VIEW_EMPLOYEES':
         employeesSearch();
         break;
       
@@ -159,7 +160,7 @@ inquirer.prompt([
     name: "role",
     type: "list",
     message: "What is the employee's role?",
-    choices: ["Sales Lead", "Salesperson", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead"]
+    choices: ["Sales Lead", "Salesperson", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead", "Lawyer"]
 
   },
   {
