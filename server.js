@@ -90,35 +90,55 @@ const viewAndManage = () => {
         employeesSearch();
         break;
       
-      case 'View All Employees By Department':
+      case 'VIEW_EMPLOYEES_BY_DEPARTMENT':
         employeesByDept();
         break;
 
-      case 'View All Employees By Manager':
+      case 'VIEW_EMPLOYEES_BY_MANAGER':
         employeesByManager();
         break;
 
-      case 'Add Employee':
+      case 'ADD_EMPLOYEE':
         addEmployee();
         break;
     
-      case 'Remove Employee':
+      case 'REMOVE_EMPLOYEE':
         removeEmployee();
         break;
 
-      case 'View All Departments':
+      case 'UPDATE_EMPLOYEE_ROLE':
+        updateEmployeeRole();
+        break;
+        
+      case 'UPDATE_EMPLOYEE_MANAGER':
+        updateEmployeeManager();
+        break;
+        
+      case 'VIEW_ROLES':
+        viewRoles();
+        break;
+
+      case 'ADD_ROLES':
+        addRole();
+        break;
+
+      case 'REMOVE_ROLES':
+        removeRole();
+        break;
+
+      case 'VIEW_DEPARTMENTS':
         viewDepartments();
         break;
 
-      case 'Add Department':
+      case 'ADD_DEPARTMENT':
         addDepartment();
         break;
 
-      case 'Remove Department':
+      case 'REMOVE_DEPARTMENT':
         removeDepartment();
         break;
 
-      case 'Quit':
+      case 'QUIT':
         connection.end();
         break;
 
@@ -131,20 +151,22 @@ const viewAndManage = () => {
 }
 
 const employeesSearch = () => {
-  connection.query('SELECT * FROM employees LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager on manager.id = employee.manager_id', (err, result) => {
+  connection.query(`SELECT employee.id AS "ID", employee.first_name AS "first_name", employee.last_name AS "last_name", role.title AS "title", department.name AS "department", role.salary AS "salary", CONCAT(manager.first_name, " ", manager.last_name) AS "manager" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id ORDER BY id`), (err, res) => {
     if (err) throw err;
-};
+    console.table(res)
+  };
+}
 
 
 const employeesByDept = (departmentId) => {
-  const viewDepartments(departments)
-  inquirer.prompt({
-    type: 'list',
-    name: 'departments',
-    message: "Which department do you want"
-  })
-  connection.query('SELECT first_name AS Name, last_name, role_id FROM employees LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.id = ?', department.id (err, result) => {
-    if (err) throw err;
+  // const viewDepartments(departments)
+  // inquirer.prompt({
+  //   type: 'list',
+  //   name: 'departments',
+  //   message: "Which department do you want"
+  // })
+  // connection.query('SELECT first_name AS Name, last_name, role_id FROM employees LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.id = ?', department.id (err, result) => {
+  //   if (err) throw err;
 };
 
 const employeesByManager = () => {
@@ -152,58 +174,78 @@ const employeesByManager = () => {
 }
 
 const addEmployee = () => {
-  connection.query('SELECT * from m.employees', (err, result) => {
-    if (err) throw err;
+//   connection.query('SELECT * from m.employees', (err, result) => {
+//     if (err) throw err;
   
-inquirer.prompt([
-  {
-    name: "first",
-    type: "input",
-    message: "What is the employee's first name?"
+// inquirer.prompt([
+//   {
+//     name: "first",
+//     type: "input",
+//     message: "What is the employee's first name?"
 
-  },
-  {
-    name: "last",
-    type: "input",
-    message: "What is the employee's last name?"
+//   },
+//   {
+//     name: "last",
+//     type: "input",
+//     message: "What is the employee's last name?"
 
-  },
-  {
-    name: "role",
-    type: "list",
-    message: "What is the employee's role?",
-    choices: ["Sales Lead", "Salesperson", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead", "Lawyer"]
+//   },
+//   {
+//     name: "role",
+//     type: "list",
+//     message: "What is the employee's role?",
+//     choices: ["Sales Lead", "Salesperson", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead", "Lawyer"]
 
-  },
-  {
-    name: "manager",
-    type: "rawlist",
-    message: "Who is the employee's manager?",
-    choices() {
-      const managerArray = [];
-    }
+//   },
+//   {
+//     name: "manager",
+//     type: "rawlist",
+//     message: "Who is the employee's manager?",
+//     choices() {
+//       const managerArray = [];
+//     }
   
-  }
-])
-.then((answers) => {
-  connection.query('INSERT INTO employee SET ?',
-  {
-    first_name: answer.first,
-    last_name: answer.last,
-    role_id: answer.role,
-    manager_id: answer.manager || null,
-  },
-  (err) => {
-    if (err) throw err;
-    console.log('Your employee was successfully added');
-    viewAndManage();
-  }
-  );
-});
-});
+//   }
+// ])
+// .then((answers) => {
+//   connection.query('INSERT INTO employee SET ?',
+//   {
+//     first_name: answer.first,
+//     last_name: answer.last,
+//     role_id: answer.role,
+//     manager_id: answer.manager || null,
+//   },
+//   (err) => {
+//     if (err) throw err;
+//     console.log('Your employee was successfully added');
+//     viewAndManage();
+//   }
+//   );
+// });
+// });
 };
 
 const removeEmployee = () => {
+
+}
+
+const updateEmployeeRole  = () => {
+
+}
+
+const updateEmployeeManager  = () => {
+
+}
+
+const viewRoles  = () => {
+
+}
+
+const addRole  = () => {
+
+}
+
+const removeRole  = () => {
 
 }
 
