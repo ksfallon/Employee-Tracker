@@ -131,18 +131,30 @@ const viewAndManage = () => {
 }
 
 const employeesSearch = () => {
+  connection.query('SELECT * FROM employees LEFT JOIN role ON employee.role_id = role.id', (err, result) => {
+    if (err) throw err;
+};
 
-}
 
-const employeesByDept = () => {
-
-}
+const employeesByDept = (departmentId) => {
+  const viewDepartments(departments)
+  inquirer.prompt({
+    type: 'list',
+    name: 'departments',
+    message: "Which department do you want"
+  })
+  connection.query('SELECT first_name, last_name, role_id FROM employees LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.id = ?', department.id (err, result) => {
+    if (err) throw err;
+};
 
 const employeesByManager = () => {
 
 }
 
 const addEmployee = () => {
+  connection.query('SELECT * from m.employees', (err, result) => {
+    if (err) throw err;
+  
 inquirer.prompt([
   {
     name: "first",
@@ -187,6 +199,7 @@ inquirer.prompt([
     viewAndManage();
   }
   );
+});
 });
 };
 
