@@ -131,7 +131,7 @@ const viewAndManage = () => {
 }
 
 const employeesSearch = () => {
-  connection.query('SELECT * FROM employees LEFT JOIN role ON employee.role_id = role.id', (err, result) => {
+  connection.query('SELECT * FROM employees LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager on manager.id = employee.manager_id', (err, result) => {
     if (err) throw err;
 };
 
@@ -143,7 +143,7 @@ const employeesByDept = (departmentId) => {
     name: 'departments',
     message: "Which department do you want"
   })
-  connection.query('SELECT first_name, last_name, role_id FROM employees LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.id = ?', department.id (err, result) => {
+  connection.query('SELECT first_name AS Name, last_name, role_id FROM employees LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.id = ?', department.id (err, result) => {
     if (err) throw err;
 };
 
