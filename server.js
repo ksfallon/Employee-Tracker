@@ -12,6 +12,8 @@ const connection = mysql.createConnection({
 
   password: 'password',
   database: 'emp_trackerDB',
+
+  multipleStatements: true,
 });
 
 connection.connect((err) => {
@@ -154,6 +156,7 @@ const employeesSearch = () => {
   connection.query(`SELECT employee.id AS "ID", employee.first_name AS "first_name", employee.last_name AS "last_name", role.title AS "title", department.name AS "department", role.salary AS "salary", CONCAT(manager.first_name, " ", manager.last_name) AS "manager" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id ORDER BY id`), (err, result) => {
     if (err) throw err;
     console.table(result);
+    return viewAndManage();
   };
 }
 
@@ -221,31 +224,16 @@ inquirer.prompt([
   }
 ]) // end of prompt section
 .then((answer) => {
-  connection.query(`SELECT role.id from role WHERE role.title = ${answer.role}`, (err, result) => {
+  connection.query(`INSERT into employee (first_name, last_name, role_id, manager_id) VALUE (first_name: ${answer.name}, last_name: ${anser.last}, role_id: SELECT role.id from role WHERE role.title = ${answer.role}, SELECT employee.id from employee WHERE concat(employee.first_name, " ", employee.last_name) = ${answer.manager})`, (err, result) => {
     if (err) throw err;
-    let roleNum = result
-    connection.query(`SELECT employee.id from employee WHERE concat(employee.first_name, " ", employee.last_name) = ${answer.manager}` => {
-      if (err) throw err;
-      let managerNum = result
-      connection.query('INSERT into employee (first_name, last_name, role_id, manager_id) VALUE ?',
-        {
-          first_name: answer.first, 
-          last_name: answer.last, 
-          role_id: roleNum.role,
-          manager_id: managerNum.manager
-        },
-        (err) => {
-          if (err) throw err;
-          console.log('Your employee was successfully added');
-          viewAndManage();
-        }
-    }
+    console.log(result)
+    return viewAndManage();
   })
+
  
+}) //end of first then statement
+}; // end of the function
 
-}) //end of then statement
-
-}; // end of the functnion
 
 
 const removeEmployee = () => {
