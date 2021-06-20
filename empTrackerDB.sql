@@ -18,7 +18,7 @@ CONSTRAINT FK_department FOREIGN KEY(department_id) REFERENCES department(id) ON
 PRIMARY KEY(id)
 );
 
-The manager id is in reference to the person who manages this employee, NOT the employee themselves, so it an be NULL
+-- The manager id is in reference to the person who manages this employee, NOT the employee themselves, so it an be NULL
 CREATE TABLE employee(
 id INT auto_increment NOT NULL,
 first_name VARCHAR(30) NOT NULL,

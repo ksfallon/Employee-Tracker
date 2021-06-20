@@ -151,9 +151,9 @@ const viewAndManage = () => {
 }
 
 const employeesSearch = () => {
-  connection.query(`SELECT employee.id AS "ID", employee.first_name AS "first_name", employee.last_name AS "last_name", role.title AS "title", department.name AS "department", role.salary AS "salary", CONCAT(manager.first_name, " ", manager.last_name) AS "manager" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id ORDER BY id`), (err, res) => {
+  connection.query(`SELECT employee.id AS "ID", employee.first_name AS "first_name", employee.last_name AS "last_name", role.title AS "title", department.name AS "department", role.salary AS "salary", CONCAT(manager.first_name, " ", manager.last_name) AS "manager" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id ORDER BY id`), (err, result) => {
     if (err) throw err;
-    console.table(res)
+    console.table(result);
   };
 }
 
@@ -173,57 +173,80 @@ const employeesByManager = () => {
 
 }
 
-const addEmployee = () => {
-//   connection.query('SELECT * from m.employees', (err, result) => {
-//     if (err) throw err;
-  
-// inquirer.prompt([
-//   {
-//     name: "first",
-//     type: "input",
-//     message: "What is the employee's first name?"
+const addEmployee = () => { 
 
-//   },
-//   {
-//     name: "last",
-//     type: "input",
-//     message: "What is the employee's last name?"
+inquirer.prompt([
+  {
+    name: "first",
+    type: "input",
+    message: "What is the employee's first name?"
 
-//   },
-//   {
-//     name: "role",
-//     type: "list",
-//     message: "What is the employee's role?",
-//     choices: ["Sales Lead", "Salesperson", "Lead Engineer", "Software Engineer", "Account Manager", "Accountant", "Legal Team Lead", "Lawyer"]
+  },
+  {
+    name: "last",
+    type: "input",
+    message: "What is the employee's last name?"
 
-//   },
-//   {
-//     name: "manager",
-//     type: "rawlist",
-//     message: "Who is the employee's manager?",
-//     choices() {
-//       const managerArray = [];
-//     }
-  
-//   }
-// ])
-// .then((answers) => {
-//   connection.query('INSERT INTO employee SET ?',
-//   {
-//     first_name: answer.first,
-//     last_name: answer.last,
-//     role_id: answer.role,
-//     manager_id: answer.manager || null,
-//   },
-//   (err) => {
-//     if (err) throw err;
-//     console.log('Your employee was successfully added');
-//     viewAndManage();
-//   }
-//   );
-// });
-// });
-};
+  },
+  {
+    name: "role",
+    type: "rawlist",
+    choices() {
+      const query = 'SELECT role.title FROM role'
+      connection.query(query, (err, result) => {
+        if (err) throw err;
+        let roleArr = [];
+        result.forEach(result_title => {
+          roleArr.push(result_title);
+        });
+        return roleArr;
+      })
+    },
+    message: "What is the employee's role?"
+  },
+  {
+    name: "manager",
+    type: "rawlist",
+    choices() {
+      const query = 'SELECT CONCAT(manager.first_name, " ", manager.last_name) AS "manager" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id'
+      connection.query(query, (err, result) => {
+        if (err) throw err;
+        let managerArr = [];
+        result.forEach(result_manager => {
+          managerArr.push(result_manager);
+        })
+      })
+    },
+     message: "Who is the employee's manager?"
+  }
+]) // end of prompt section
+.then((answer) => {
+  connection.query(`SELECT role.id from role WHERE role.title = ${answer.role}`, (err, result) => {
+    if (err) throw err;
+    let roleNum = result
+    connection.query(`SELECT employee.id from employee WHERE concat(employee.first_name, " ", employee.last_name) = ${answer.manager}` => {
+      if (err) throw err;
+      let managerNum = result
+      connection.query('INSERT into employee (first_name, last_name, role_id, manager_id) VALUE ?',
+        {
+          first_name: answer.first, 
+          last_name: answer.last, 
+          role_id: roleNum.role,
+          manager_id: managerNum.manager
+        },
+        (err) => {
+          if (err) throw err;
+          console.log('Your employee was successfully added');
+          viewAndManage();
+        }
+    }
+  })
+ 
+
+}) //end of then statement
+
+}; // end of the functnion
+
 
 const removeEmployee = () => {
 

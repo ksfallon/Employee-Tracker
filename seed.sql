@@ -1,3 +1,5 @@
+USE emp_trackerDB;
+
 INSERT into department (name)
 VALUE 
 ("Sales"),  --id:1
