@@ -218,7 +218,28 @@ const employeesByDept = (departments) => {
 
 // BONUS
 const employeesByManager = () => {
-
+const query = `SELECT DISTINCT CONCAT(manager.first_name, " ", manager.last_name) AS "Manager" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id`
+connection.query(query, (err, result) => {
+  if (err) throw err;
+  let managerArr = [];
+  for (let i = 0; i < result.length; i++) {
+    managerArr.push(result[i].manager)
+    console.table (managerArr)
+  }
+  inquirer.prompt({
+    type: 'list',
+    name: 'managerList',
+    message: 'Please Choose a Manager',
+    choices: managerArr,
+  }).then(answer => {
+    const query = `SELECT concat(employee.first_name, " ", employee.last_name) AS "${answer.managerList}'s Employees" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id WHERE employee.manager_id = ${answer.managerList}.id`
+    connection.query(query, (err, result) => {
+      if (err) throw err;
+      console.table(result)
+      return viewAndManage();
+    });
+  })
+})
 }
 
 // MUST HAVAE
@@ -253,16 +274,17 @@ inquirer.prompt([
   },
   {
     name: "manager",
-    type: "rawlist",
+    type: "list",
     choices() {
-      const query = 'SELECT CONCAT(manager.first_name, " ", manager.last_name) AS "manager" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id'
+      const query = 'SELECT CONCAT(manager.first_name, " ", manager.last_name) FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id'
       connection.query(query, (err, result) => {
         if (err) throw err;
         let managerArr = [];
-        result.forEach(result_manager => {
-          managerArr.push(result_manager);
+        result.forEach(({first_name, last_name}) => {
+          managerArr.push(`${first_name} ${last_name}`);
         })
       })
+      return managerArr;
     },
      message: "Who is the employee's manager?"
   }
