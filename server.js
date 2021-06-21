@@ -223,7 +223,7 @@ connection.query(query, (err, result) => {
   if (err) throw err;
   let managerArr = [];
   for (let i = 0; i < result.length; i++) {
-    managerArr.push(result[i].manager)
+    managerArr.push(result[i])
     console.table (managerArr)
   }
   inquirer.prompt({
