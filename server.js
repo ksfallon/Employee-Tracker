@@ -244,16 +244,24 @@ connection.query(query, (err, result) => {
 
 // MUST HAVAE
 const addEmployee = () => { 
-  connection.query = `SELECT * FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON manager.id = employee.manager_id  `
-  const roleChoices = results.map(function (department){
-    return {
-      value: department.id,
-      name: department.name,
-    }
-})
-  // connection.query(`SELECT * FROM role, employee`, (err, result) => {
-  //   if (err) throw err;
-  //   });
+  connection.query(`SELECT * FROM role`, (err, result) => {
+    if (err) throw err;
+    const roleChoices = result.map(function (role){
+      return {
+        value: role.id,
+        name: role.title,
+      }
+    })
+    })
+    connection.query(`SELECT DISTINCT CONCAT(manager.first_name, " ", manager.last_name), manager.id FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id`, (err, result) => {
+      if (err) throw err;
+      const managerChoices = result.map(function (employee){
+        return {
+          value: employee.id,
+          name: manager.title,
+        }
+      })
+      })
 inquirer.prompt([
   {
     name: "first",
@@ -270,19 +278,13 @@ inquirer.prompt([
   {
     name: "role",
     type: "list",
-    choices() {
-        let roleArr = [];
-        result.forEach(({id, title,}) => {
-          roleArr.push(`${id} ${title}`);
-        });
-        return roleArr;
-    },
+    choices: roleChoices,
     message: "What is the employee's role?"
   },
   {
     name: "manager",
     type: "list",
-    choices: departmentChoices,
+    choices: managerChoices,
      message: "Who is the employee's manager?"
   }
 ]) 
