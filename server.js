@@ -181,6 +181,7 @@ const employeesByDept = (department) => {
     name: 'departments',
     choices() {
       const choiceArray = [];
+      // the forEACH function isn't working properly, need to figure out how or change it to MAP
       viewDepartments(department).forEach(department => {
         choiceArray.push(department);
       });
