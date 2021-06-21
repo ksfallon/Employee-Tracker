@@ -133,7 +133,7 @@ const viewAndManage = () => {
         viewRoles();
         break;
 
-      case 'ADD_ROLES':
+      case 'ADD_ROLE':
         addRole();
         break;
 
@@ -245,7 +245,7 @@ connection.query(query, (err, result) => {
 // MUST HAVAE
 const addEmployee = () => { 
   connection.query = `SELECT * FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON manager.id = employee.manager_id  `
-  const departmentChoices = results.map(function (department){
+  const roleChoices = results.map(function (department){
     return {
       value: department.id,
       name: department.name,
@@ -357,10 +357,16 @@ inquirer.prompt([
 ]) 
 // end of prompt section
 .then((answer) => {
-  connection.query(`SELECT DISTINCT department.id FROM department LEFT JOIN role ON role.department_id = department.id WHERE department.name = ${answer.manager}`, (err, result) => {
+  // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
+  connection.query(`INSERT into role SET?` ,
+  {
+    title:answer.title, 
+    salary: answer.salary, 
+    department_id: answer.department
+  },
+  (err) => {
     if (err) throw err;
-    const departmentId = result
-    console.log(departmentId)
+    console.log('Role added successfully')
 
     return viewAndManage();
   })
