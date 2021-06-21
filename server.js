@@ -1,6 +1,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
+// const Classes = require('./classes')
 
 
 const connection = mysql.createConnection({
@@ -40,7 +41,7 @@ const viewAndManage = () => {
     message: 'What would you like to do?', 
     choices: [
       {
-        name: "View All Employees",
+        name: "View All Employees", //MUST HAVE
         value: "VIEW_EMPLOYEES"
       },
       {
@@ -52,7 +53,7 @@ const viewAndManage = () => {
         value: "VIEW_EMPLOYEES_BY_MANAGER"
       },
       {
-        name: "Add Employee",
+        name: "Add Employee", //MUST HAVE
         value: "ADD_EMPLOYEE"
       },
       {
@@ -60,7 +61,7 @@ const viewAndManage = () => {
         value: "REMOVE_EMPLOYEE"
       },
       {
-        name: "Update Employee Role",
+        name: "Update Employee Role", //MUST HAVE
         value: "UPDATE_EMPLOYEE_ROLE"
       },
       
@@ -69,11 +70,11 @@ const viewAndManage = () => {
         value: "UPDATE_EMPLOYEE_MANAGER"
       },
       {
-        name: "View All Roles",
+        name: "View All Roles", //MUST HAVE
         value: "VIEW_ROLES"
       },
       {
-        name: "Add Role",
+        name: "Add Role", //MUST HAVE
         value: "ADD_ROLE"
       },
       {
@@ -81,11 +82,11 @@ const viewAndManage = () => {
         value: "REMOVE_ROLE"
       },
       {
-        name: "View All Departments",
+        name: "View All Departments", //MUST HAVE
         value: "VIEW_DEPARTMENTS"
       },
       {
-        name: "Add Department",
+        name: "Add Department", //MUST HAVE
         value: "ADD_DEPARTMENT"
       },
       {
@@ -173,96 +174,109 @@ const employeesSearch = () => {
   });
 }
 
+// BONUS
+const employeesByDept = (departments) => {
+  // const query = `SELECT DISTINCT department.name FROM department ORDER BY department.id`
+  // connection.query(query, (err, result) => {
+  //   if (err) throw err;
+  //   let departmentList = []
+  //   for (let i = 0; i < result.length; i++) {
+  //     departmentList.push(result[i].department)
+  //     console.table(departmentList)
+  //   }
+  // inquirer.prompt({
+  //   type: 'list',
+  //   name: 'departments',
+  //   choices: departmentList,
+    // choices() {
+    //   const choiceArr = [];
+    //   const query = `SELECT department.name FROM department ORDER BY department.id`
+    //   connection.query(query, (err, result) => {
+    //     if (err) throw err;
+    //     result.map((department) => {
+    //       choiceArr.push(department)
+    //       console.log("Am i getting a department list??? ", (choiceArr))
 
-const employeesByDept = (department) => {
-  // const viewDepartments(departments)
-  inquirer.prompt({
-    type: 'rawlist',
-    name: 'departments',
-    choices() {
-      const choiceArray = [];
-      // the forEACH function isn't working properly, need to figure out how or change it to MAP
-      viewDepartments(department).forEach(department => {
-        choiceArray.push(department);
-      });
-      return choiceArray;
-
-      },
-      message: "Which department do you want",
-  })
-  .then((answer) => {
-    const query = `SELECT employee.first_name AS "First Name", employee.last_name AS "Last Name", department.name AS "Deparment" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.name = ${answer.departments}`
-    connection.query(query, (err, result) => {
-      if (err) throw err;
-      console.table(result)
-      return viewAndManage();
-    });
-  })
+    //     })
+    //   });
+    //   return choiceArr;
+    //   },
+  //     message: "Which department do you want",
+  // })
+  // .then((answer) => {
+  //   const query = `SELECT employee.first_name AS "First Name", employee.last_name AS "Last Name", department.name AS "Deparment" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.name = ${answer.departments}`
+  //   connection.query(query, (err, result) => {
+  //     if (err) throw err;
+  //     console.table(result)
+  //     return viewAndManage();
+  //   });
+  // })
   // connection.query('SELECT first_name AS Name, last_name, role_id FROM employees LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.id = ?', department.id (err, result) => {
   //   if (err) throw err;
+// })
 };
 
+// BONUS
 const employeesByManager = () => {
 
 }
 
+// MUST HAVAE
 const addEmployee = () => { 
+  connection.query(`SELECT * FROM role, employee`, (err, result) => {
+    if (err) throw err;
+    });
+inquirer.prompt([
+  {
+    name: "first",
+    type: "input",
+    message: "What is the employee's first name?"
 
-// inquirer.prompt([
-//   {
-//     name: "first",
-//     type: "input",
-//     message: "What is the employee's first name?"
+  },
+  {
+    name: "last",
+    type: "input",
+    message: "What is the employee's last name?"
 
-//   },
-//   {
-//     name: "last",
-//     type: "input",
-//     message: "What is the employee's last name?"
-
-//   },
-//   {
-//     name: "role",
-//     type: "rawlist",
-//     choices() {
-//       const query = 'SELECT role.title FROM role'
-//       connection.query(query, (err, result) => {
-//         if (err) throw err;
-//         let roleArr = [];
-//         result.forEach(result_title => {
-//           roleArr.push(result_title);
-//         });
-//         return roleArr;
-//       })
-//     },
-//     message: "What is the employee's role?"
-//   },
-//   {
-//     name: "manager",
-//     type: "rawlist",
-//     choices() {
-//       const query = 'SELECT CONCAT(manager.first_name, " ", manager.last_name) AS "manager" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id'
-//       connection.query(query, (err, result) => {
-//         if (err) throw err;
-//         let managerArr = [];
-//         result.forEach(result_manager => {
-//           managerArr.push(result_manager);
-//         })
-//       })
-//     },
-//      message: "Who is the employee's manager?"
-//   }
-// ]) 
+  },
+  {
+    name: "role",
+    type: "list",
+    choices() {
+        let roleArr = [];
+        result.forEach(({id, title,}) => {
+          roleArr.push(`${id} ${title}`);
+        });
+        return roleArr;
+    },
+    message: "What is the employee's role?"
+  },
+  {
+    name: "manager",
+    type: "rawlist",
+    choices() {
+      const query = 'SELECT CONCAT(manager.first_name, " ", manager.last_name) AS "manager" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id'
+      connection.query(query, (err, result) => {
+        if (err) throw err;
+        let managerArr = [];
+        result.forEach(result_manager => {
+          managerArr.push(result_manager);
+        })
+      })
+    },
+     message: "Who is the employee's manager?"
+  }
+]) 
 // end of prompt section
-// .then((answer) => {
-//   connection.query(`INSERT into employee (first_name, last_name, role_id, manager_id) VALUE (first_name: ${answer.name}, last_name: ${anser.last}, role_id: SELECT role.id from role WHERE role.title = ${answer.role}, SELECT employee.id from employee WHERE concat(employee.first_name, " ", employee.last_name) = ${answer.manager})`, (err, result) => {
-//     if (err) throw err;
-//     console.log(result)
-//     return viewAndManage();
-//   })
+.then((answer) => {
+  connection.query(`INSERT into employee (first_name, last_name, role_id, manager_id) VALUE (first_name: ${answer.name}, last_name: ${anser.last}, role_id: SELECT role.id from role WHERE role.title = ${answer.role}, SELECT employee.id from employee WHERE concat(employee.first_name, " ", employee.last_name) = ${answer.manager})`, (err, result) => {
+    if (err) throw err;
+    console.log(result)
+    return viewAndManage();
+  })
 
  
-// })
+})
  //end of first then statement
 }; 
 // end of the function
@@ -285,7 +299,9 @@ const viewRoles  = () => {
   const query = `SELECT role.title AS "role title" FROM role ORDER BY role.id`
   connection.query(query, (err, result) => {
     if (err) throw err;
-    console.table(result)
+    // const roles = Classes.getRoles()
+    // console.table(JSON.stringify(roles))
+    console.table(result);
     return viewAndManage();
   });
 }
