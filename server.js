@@ -158,7 +158,7 @@ const viewAndManage = () => {
         break;
 
       default:
-        console.log(`Invalid action: ${answer.action}`);
+        console.log(`Invalid action: ${answers.action}`);
         break;
       
     }
@@ -244,9 +244,16 @@ connection.query(query, (err, result) => {
 
 // MUST HAVAE
 const addEmployee = () => { 
-  connection.query(`SELECT * FROM role, employee`, (err, result) => {
-    if (err) throw err;
-    });
+  connection.query = `SELECT * FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON manager.id = employee.manager_id  `
+  const departmentChoices = results.map(function (department){
+    return {
+      value: department.id,
+      name: department.name,
+    }
+})
+  // connection.query(`SELECT * FROM role, employee`, (err, result) => {
+  //   if (err) throw err;
+  //   });
 inquirer.prompt([
   {
     name: "first",
@@ -275,17 +282,7 @@ inquirer.prompt([
   {
     name: "manager",
     type: "list",
-    choices() {
-      const query = 'SELECT CONCAT(manager.first_name, " ", manager.last_name) FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id'
-      connection.query(query, (err, result) => {
-        if (err) throw err;
-        let managerArr = [];
-        result.forEach(({first_name, last_name}) => {
-          managerArr.push(`${first_name} ${last_name}`);
-        })
-      })
-      return managerArr;
-    },
+    choices: departmentChoices,
      message: "Who is the employee's manager?"
   }
 ]) 
@@ -329,7 +326,48 @@ const viewRoles  = () => {
 }
 
 const addRole  = () => {
+    connection.query(`SELECT * FROM department`, (err, result) => {
+    if (err) throw err;
+  const departmentChoices = result.map(function (department){
+    return {
+      value: department.id,
+      name: department.name,
+    }
+})
+inquirer.prompt([
+  {
+    name: "title",
+    type: "input",
+    message: "What is the role title?"
 
+  },
+  {
+    name: "salary",
+    type: "input",
+    message: "What is the salary?"
+
+  },
+  {
+    name: "department",
+    type: "list",
+    choices: departmentChoices,
+    message: "Which department is this new role in?"
+  },
+
+]) 
+// end of prompt section
+.then((answer) => {
+  connection.query(`SELECT DISTINCT department.id FROM department LEFT JOIN role ON role.department_id = department.id WHERE department.name = ${answer.manager}`, (err, result) => {
+    if (err) throw err;
+    const departmentId = result
+    console.log(departmentId)
+
+    return viewAndManage();
+  })
+
+ 
+})
+})
 }
 
 const removeRole  = () => {
