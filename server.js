@@ -336,12 +336,11 @@ const removeEmployee = () => {};
 const updateEmployeeRole = () => {
   connection.query(`SELECT * FROM role`, (err, result) => {
     if (err) throw err;
-    // const roleChoices = result.map(function (role) {
-    //   return {
-    //     value: role.id,
-    //     name: role.title,
-    //   };
-    // });
+    const roleArr = [];
+    result.forEach(({ title, id }) => {
+      roleArr.push(id + " " + title);
+      console.log(roleArr);
+    
     connection.query(`SELECT * FROM employee`, (err, result) => {
       if (err) throw err;
       inquirer
@@ -362,14 +361,13 @@ const updateEmployeeRole = () => {
           {
             name: "roles",
             type: "list",
-            choices() {
-              const roleArr = [];
-              result.forEach(({ title, id }) => {
-                roleArr.push(id + " " + title);
-                console.log(roleArr);
-              });
-              return roleArr;
-            },
+            choices: roleArr,
+              // const roleArr = [];
+              // result.forEach(({ title, id }) => {
+              //   roleArr.push(id + " " + title);
+              //   console.log(roleArr);
+              // });
+              // return roleArr;
             message: "What is their new role?",
           },
         ])
@@ -409,6 +407,7 @@ const updateEmployeeRole = () => {
           }); //first forEach end
         });
     });
+  });
   });
   // connection.query(`SELECT * FROM employee`, (err, result) => {
   //   if (err) throw err;
