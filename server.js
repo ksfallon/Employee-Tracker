@@ -41,7 +41,7 @@ const viewAndManage = () => {
     message: 'What would you like to do?', 
     choices: [
       {
-        name: "View All Employees", //MUST HAVE
+        name: "View All Employees", //DONE - MUST HAVE 
         value: "VIEW_EMPLOYEES"
       },
       {
@@ -53,7 +53,7 @@ const viewAndManage = () => {
         value: "VIEW_EMPLOYEES_BY_MANAGER"
       },
       {
-        name: "Add Employee", //MUST HAVE
+        name: "Add Employee", //DONE- MUST HAVE
         value: "ADD_EMPLOYEE"
       },
       {
@@ -70,11 +70,11 @@ const viewAndManage = () => {
         value: "UPDATE_EMPLOYEE_MANAGER"
       },
       {
-        name: "View All Roles", //MUST HAVE
+        name: "View All Roles", //DONE - MUST HAVE
         value: "VIEW_ROLES"
       },
       {
-        name: "Add Role", //MUST HAVE
+        name: "Add Role", //DONE - MUST HAVE
         value: "ADD_ROLE"
       },
       {
@@ -82,11 +82,11 @@ const viewAndManage = () => {
         value: "REMOVE_ROLE"
       },
       {
-        name: "View All Departments", //MUST HAVE
+        name: "View All Departments", //DONE - MUST HAVE
         value: "VIEW_DEPARTMENTS"
       },
       {
-        name: "Add Department", //MUST HAVE
+        name: "Add Department", //DONE - MUST HAVE
         value: "ADD_DEPARTMENT"
       },
       {
@@ -102,7 +102,7 @@ const viewAndManage = () => {
   .then((answers) => {
     switch (answers.action) {
       case 'VIEW_EMPLOYEES':
-        employeesSearch();
+        viewAllEmployees();
         break;
       
       case 'VIEW_EMPLOYEES_BY_DEPARTMENT':
@@ -165,7 +165,8 @@ const viewAndManage = () => {
   })
 };
 
-const employeesSearch = () => {
+// DONE MUST HAVE
+const viewAllEmployees = () => {
   const query = `SELECT employee.id AS "id", employee.first_name AS "first name", employee.last_name AS "last name", role.title AS "title", department.name AS "department", role.salary AS "salary", CONCAT(manager.first_name, " ", manager.last_name) AS "manager" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id ORDER BY id`
   connection.query(query, (err, result) => {
     if (err) throw err;
@@ -242,7 +243,7 @@ connection.query(query, (err, result) => {
 })
 }
 
-// MUST HAVAE
+// DONE MUST HAVE 
 const addEmployee = () => { 
   connection.query(`SELECT * FROM role`, (err, result) => {
     if (err) throw err;
@@ -252,16 +253,17 @@ const addEmployee = () => {
         name: role.title,
       }
     })
-   
-    connection.query(`SELECT DISTINCT CONCAT(manager.first_name, " ", manager.last_name), manager.id FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id`, (err, result) => {
+    connection.query(`SELECT * FROM employee`, (err, result) => {
       if (err) throw err;
-      const managerChoices = result.map(function (employee){
-        return {
-          value: employee.id,
-          name: employee.first_name + employee.last_name
-        }
+    // connection.query(`SELECT DISTINCT CONCAT(manager.first_name, " ", manager.last_name), manager.id FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id`, (err, result) => {
+    //   if (err) throw err;
+    //   const managerChoices = result.map(function (employee){
+    //     return {
+    //       value: employee.id,
+    //       name: employee.first_name + employee.last_name
+    //     }
       
-      })
+    //   })
 inquirer.prompt([
   {
     name: "first",
@@ -284,20 +286,34 @@ inquirer.prompt([
   {
     name: "manager",
     type: "list",
-    choices: managerChoices,
-     message: "Who is the employee's manager?"
+    message: "Who is the employee's manager?",
+    choices() {
+      const managerArr = []
+      result.forEach(({first_name, last_name, id}) => {
+        managerArr.push(id + " " + first_name + " " + last_name)
+        console.log(managerArr)
+      })
+      return managerArr
+    }
   }
 ]) 
 // end of prompt section
 .then((answer) => {
+  let managerId = answer.manager.split(" ")
+  console.log(managerId[0])
+  result.forEach(({id}) => {
+    console.log(id, managerId[0])
+    if (id == managerId[0])
+    console.log("got id to equal managerId[0]")
+  
   // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
   connection.query(`INSERT into employee SET?` ,
-  {
+ [{
     first_name:answer.first, 
     last_name: answer.last, 
     role_id: answer.role,
-    manager_id: answer.manager
-  },
+    manager_id: managerId[0]
+  }],
   (err) => {
     if (err) throw err;
     console.log('Employee added successfully')
@@ -305,21 +321,61 @@ inquirer.prompt([
     return viewAndManage();
   })
 
- 
+})
 })
  //end of first then statement
 })
+//end of second connection.query with employee
 })
-}; 
-// end of the function
+//end of first connection.query with role
+}; // end of the function
 
-
-
+// Bonus
 const removeEmployee = () => {
 
 }
 
+// MUST HAVE
 const updateEmployeeRole  = () => {
+  connection.query(`SELECT * FROM role`, (err, result) => {
+    if (err) throw err;
+    const roleChoices = result.map(function (role){
+      return {
+        value: role.id,
+        name: role.title,
+      }
+    })
+    connection.query(`SELECT * FROM employee`, (err, result) => {
+      if (err) throw err;
+      inquirer.prompt([
+      {
+        name: "employees",
+        type: "list",
+        choices(){
+          const employeeArr = []
+          result.forEach(({first_name, last_name, id}) => {
+            managerArr.push(id + " " + first_name + " " + last_name)
+            console.log(employeeArr)
+          })
+          return employeeArr
+        },
+        message: "Which Employee would you like to update?"
+      },
+      {
+        name: "roles",
+        type: "list",
+        choices: roleChoices,
+        message: "What is their new role?"
+      },
+    ]).then((answer) => {
+      
+    })
+  })
+  })
+  // connection.query(`SELECT * FROM employee`, (err, result) => {
+  //   if (err) throw err;
+
+  // })
 
 }
 
@@ -404,6 +460,30 @@ const viewDepartments = () => {
 
 const addDepartment = () => {
 
+inquirer.prompt([
+  {
+    name: "name",
+    type: "input",
+    message: "What is the new department name?"
+
+  },
+]) 
+// end of prompt section
+.then((answer) => {
+  // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
+  connection.query(`INSERT into department SET?` ,
+  {
+    name:answer.name, 
+  },
+  (err) => {
+    if (err) throw err;
+    console.log('Department added successfully')
+
+    return viewAndManage();
+  })
+
+ 
+})
 }
 
 const removeDepartment = () => {
