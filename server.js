@@ -253,15 +253,11 @@ const addEmployee = () => {
     });
     connection.query(`SELECT * FROM employee`, (err, result) => {
       if (err) throw err;
-      // connection.query(`SELECT DISTINCT CONCAT(manager.first_name, " ", manager.last_name), manager.id FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id`, (err, result) => {
-      //   if (err) throw err;
-      //   const managerChoices = result.map(function (employee){
-      //     return {
-      //       value: employee.id,
-      //       name: employee.first_name + employee.last_name
-      //     }
-
-      //   })
+      const managerArr = [];
+      result.forEach(({ first_name, last_name, id }) => {
+        managerArr.push(id + " " + first_name + " " + last_name);
+        console.log(managerArr);
+      });
       inquirer
         .prompt([
           {
@@ -284,23 +280,17 @@ const addEmployee = () => {
             name: "manager",
             type: "list",
             message: "Who is the employee's manager?",
-            choices() {
-              const managerArr = [];
-              result.forEach(({ first_name, last_name, id }) => {
-                managerArr.push(id + " " + first_name + " " + last_name);
-                console.log(managerArr);
-              });
-              return managerArr;
-            },
+            choices: managerArr,
           },
         ])
         // end of prompt section
         .then((answer) => {
           let managerId = answer.manager.split(" ");
-          console.log(managerId[0]);
+          // console.log(managerId[0]);
           result.forEach(({ id }) => {
-            console.log(id, managerId[0]);
-            if (id == managerId[0]) console.log("got id to equal managerId[0]");
+            // console.log(id, managerId[0]);
+            // THIS IF STATMENT WON"T STOP RUNNING - need to put something there to it only focuses on the correct one not ALL
+            if (id == managerId[0]) { console.log("got id to equal managerId[0]")
 
             // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
             connection.query(
@@ -315,12 +305,12 @@ const addEmployee = () => {
               ],
               (err) => {
                 if (err) throw err;
-                console.log("Employee added successfully");
-
-                return viewAndManage();
               }
-            );
+            );}
           });
+          console.log("Employee added successfully");
+
+          viewAndManage();
         });
       //end of first then statement
     });
@@ -340,34 +330,26 @@ const updateEmployeeRole = () => {
     result.forEach(({ title, id }) => {
       roleArr.push(id + " " + title);
       // console.log(roleArr);
-    
+    });
     connection.query(`SELECT * FROM employee`, (err, result) => {
       if (err) throw err;
+      const employeeArr = [];
+      result.forEach(({ first_name, last_name, id }) => {
+        employeeArr.push(id + " " + first_name + " " + last_name);
+        // console.log(employeeArr);
+      });
       inquirer
         .prompt([
           {
             name: "employees",
             type: "list",
-            choices() {
-              const employeeArr = [];
-              result.forEach(({ first_name, last_name, id }) => {
-                employeeArr.push(id + " " + first_name + " " + last_name);
-                // console.log(employeeArr);
-              });
-              return employeeArr;
-            },
+            choices: employeeArr,
             message: "Which Employee would you like to update?",
           },
           {
             name: "roles",
             type: "list",
             choices: roleArr,
-              // const roleArr = [];
-              // result.forEach(({ title, id }) => {
-              //   roleArr.push(id + " " + title);
-              //   console.log(roleArr);
-              // });
-              // return roleArr;
             message: "What is their new role?",
           },
         ])
@@ -376,40 +358,38 @@ const updateEmployeeRole = () => {
           let employeeId = answer.employees.split(" ");
           // console.log(employeeId[0]);
           result.forEach(({ id }) => {
-            // console.log(id, employeeId[0]);
-            if (id == employeeId[0]) 
-            console.log("got id to equal managerId[0]");
-            let roleId = answer.roles.split(" ");
-            // console.log(roleId[0]);
-            result.forEach(({ id }) => {
-              // console.log(id, roleId[0]);
-              if (id == roleId[0]) 
-              // console.log("got id to equal roleId[0]");
-            // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
-            connection.query(
-              `UPDATE employee SET? WHERE?`,
-              [
-                {
-                  role_id: roleId[0],
-                  
-                },
-                {
-                  id: employeeId[0],
-                }
-              ],
-              
-              (err) => {
-                if (err) throw err;
-                console.log("Employee Role successfully updated");
+            if (id == employeeId[0]) {
+            }
 
-                return viewAndManage();
+            let roleId = answer.roles.split(" ");
+
+            result.forEach(({ id }) => {
+              if (id == roleId[0]) {
               }
-            );
-          }); //second forEach end
+
+              // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
+              connection.query(
+                `UPDATE employee SET? WHERE?`,
+                [
+                  {
+                    role_id: roleId[0],
+                  },
+                  {
+                    id: employeeId[0],
+                  },
+                ],
+
+                (err) => {
+                  if (err) throw err;
+                }
+              );
+            }); //second forEach end
           }); //first forEach end
+          console.log("Employee Role successfully updated");
+          viewAndManage();
         });
     });
-  });
+    // });
   });
   // connection.query(`SELECT * FROM employee`, (err, result) => {
   //   if (err) throw err;
