@@ -339,7 +339,7 @@ const updateEmployeeRole = () => {
     const roleArr = [];
     result.forEach(({ title, id }) => {
       roleArr.push(id + " " + title);
-      console.log(roleArr);
+      // console.log(roleArr);
     
     connection.query(`SELECT * FROM employee`, (err, result) => {
       if (err) throw err;
@@ -352,7 +352,7 @@ const updateEmployeeRole = () => {
               const employeeArr = [];
               result.forEach(({ first_name, last_name, id }) => {
                 employeeArr.push(id + " " + first_name + " " + last_name);
-                console.log(employeeArr);
+                // console.log(employeeArr);
               });
               return employeeArr;
             },
@@ -372,17 +372,19 @@ const updateEmployeeRole = () => {
           },
         ])
         .then((answer) => {
-          console.log('answer.role: ', answer.role)
+          // console.log('answer.role: ', answer.role)
           let employeeId = answer.employees.split(" ");
-          console.log(employeeId[0]);
+          // console.log(employeeId[0]);
           result.forEach(({ id }) => {
-            console.log(id, employeeId[0]);
-            if (id == employeeId[0]) console.log("got id to equal managerId[0]");
+            // console.log(id, employeeId[0]);
+            if (id == employeeId[0]) 
+            console.log("got id to equal managerId[0]");
             let roleId = answer.roles.split(" ");
-            console.log(roleId[0]);
+            // console.log(roleId[0]);
             result.forEach(({ id }) => {
-              console.log(id, roleId[0]);
-              if (id == roleId[0]) console.log("got id to equal roleId[0]");
+              // console.log(id, roleId[0]);
+              if (id == roleId[0]) 
+              // console.log("got id to equal roleId[0]");
             // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
             connection.query(
               `UPDATE employee SET? WHERE?`,
