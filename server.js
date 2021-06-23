@@ -191,13 +191,11 @@ const employeesByDept = () => {
           // ],
           (err, result) => {
             if (err) throw err;
-            console.log (" ");
+            console.log(" ");
             console.table(result);
             viewAndManage();
           }
-          
         );
-        
       }); //end of first then statement
   }); // End of department connection query
 };
@@ -210,7 +208,7 @@ const employeesByManager = () => {
     const managerArr = [];
     result.forEach(({ first_name, last_name, id }) => {
       managerArr.push(id + " " + first_name + " " + last_name);
-    })
+    });
     inquirer
       .prompt({
         type: "list",
@@ -220,12 +218,14 @@ const employeesByManager = () => {
       })
       .then((answer) => {
         let managerId = answer.managerList.split(" ");
-        connection.query(`SELECT CONCAT(employee.first_name, " ", employee.last_name) AS "${answer.managerList}'s Employees" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id WHERE employee.manager_id = ${managerId[0]}`, 
-        (err, result) => {
-          if (err) throw err;
-          console.table(result);
-          return viewAndManage();
-        });
+        connection.query(
+          `SELECT CONCAT(employee.first_name, " ", employee.last_name) AS "${managerId[1]} ${managerId[2]}'s Employees" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id WHERE employee.manager_id = ${managerId[0]}`,
+          (err, result) => {
+            if (err) throw err;
+            console.table(result);
+            return viewAndManage();
+          }
+        );
       });
   }); // End of first connection.query SELECT * FROM employee
 }; //End of employeesByManager()
@@ -311,7 +311,40 @@ const addEmployee = () => {
 }; // end of the function
 
 // Bonus
-const removeEmployee = () => {};
+const removeEmployee = () => {
+  connection.query(`SELECT * FROM employee`, (err, result) => {
+    if (err) throw err;
+    const managerArr = [];
+    result.forEach(({ first_name, last_name, id }) => {
+      managerArr.push(id + " " + first_name + " " + last_name);
+      // console.log(managerArr);
+    });
+    inquirer
+      .prompt([
+        {
+          name: "employee",
+          type: "list",
+          message: "Which employee would you like to delete?",
+          choices: managerArr,
+        },
+      ])
+      // end of prompt section
+      .then((answer) => {
+        let managerId = answer.manager.split(" ");
+        connection.query(
+          `DELETE FROM employee WHERE employee.id = ${managerId[0]}`,
+          (err) => {
+            if (err) throw err;
+          }
+        );
+        //   }
+        // });
+        console.log("Employee successfully delete");
+
+        viewAndManage();
+      }); //end of first then statement
+  }); //end of second connection.query with employee
+}; //end of deleteEmployee()
 
 // MUST HAVE
 const updateEmployeeRole = () => {
