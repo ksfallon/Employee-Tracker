@@ -424,6 +424,7 @@ const viewRoles = () => {
   });
 };
 
+// DONE MUST HAVE
 const addRole = () => {
   connection.query(`SELECT * FROM department`, (err, result) => {
     if (err) throw err;
@@ -474,9 +475,38 @@ const addRole = () => {
 };
 
 const removeRole = () => {
+  connection.query(`SELECT * FROM role`, (err, result) => {
+    if (err) throw err;
+    const roleArr = [];
+    result.forEach(({ title, id }) => {
+      roleArr.push(id + " " + title );
+    });
+    inquirer
+      .prompt([
+        {
+          name: "role",
+          type: "list",
+          message: "Which role would you like to remove?",
+          choices: roleArr,
+        },
+      ]) // end of prompt section
+      .then((answer) => {
+        let roleId = answer.role.split(" ");
+        connection.query(
+          `DELETE FROM role WHERE role.id = ${roleId[0]}`,
+          (err) => {
+            if (err) throw err;
+          }
+        );
 
+        console.log("Role successfully deleted");
+
+        viewAndManage();
+      }); //end of first then statement
+  }); //end of second connection.query with role
 };
 
+// DONE MUST HAVE
 const viewDepartments = () => {
   const query = `SELECT department.name AS "Departments" FROM department ORDER BY department.id`;
   connection.query(query, (err, result) => {
@@ -486,6 +516,7 @@ const viewDepartments = () => {
   });
 };
 
+// DONE MUST HAVE
 const addDepartment = () => {
   inquirer
     .prompt([
@@ -513,6 +544,7 @@ const addDepartment = () => {
     });
 };
 
+// DONE BONUS
 const removeDepartment = () => {
   connection.query(`SELECT * FROM department`, (err, result) => {
     if (err) throw err;
@@ -538,7 +570,7 @@ const removeDepartment = () => {
           }
         );
 
-        console.log("Employee successfully deleted");
+        console.log("Department successfully deleted");
 
         viewAndManage();
       }); //end of first then statement
@@ -555,3 +587,5 @@ const removeDepartment = () => {
 // VIEW employees by MANAGER
 // DELETE departments, roles, and employees
 // VIEW the total utililized budget of department (combined salaries of all employee in department)
+
+// wrote removeDepartment(), again the same as removeEmployee just need to change the connection query to `SELECT * FROM department` changed the array const to departmentArr, updated the prompt to include departmentArr in choices and name to equal department and message to ask to remove a department in the then portion the new const is now departmentId and we split at answer.department and the query is `DELETE FROM department WHERE department.id = ${departmentId[0]}`
