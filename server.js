@@ -275,14 +275,6 @@ const addEmployee = () => {
         // end of prompt section
         .then((answer) => {
           let managerId = answer.manager.split(" ");
-          // console.log("ManagerId is what?", managerId)
-          // console.log(managerId[0]);
-          // result.forEach(({ id }) => {
-          // console.log(id, managerId[0]);
-          // THIS IF STATMENT WON"T STOP RUNNING - need to put something there to it only focuses on the correct one not ALL
-          // if (id == managerId[0]) {
-          //   console.log("got id to equal managerId[0]")
-          // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
           connection.query(
             `INSERT into employee SET?`,
             [
