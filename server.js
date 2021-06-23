@@ -125,7 +125,7 @@ const viewAndManage = () => {
           addRole();
           break;
 
-        case "REMOVE_ROLES":
+        case "REMOVE_ROLE":
           removeRole();
           break;
 
@@ -587,5 +587,3 @@ const removeDepartment = () => {
 // VIEW employees by MANAGER
 // DELETE departments, roles, and employees
 // VIEW the total utililized budget of department (combined salaries of all employee in department)
-
-// wrote removeDepartment(), again the same as removeEmployee just need to change the connection query to `SELECT * FROM department` changed the array const to departmentArr, updated the prompt to include departmentArr in choices and name to equal department and message to ask to remove a department in the then portion the new const is now departmentId and we split at answer.department and the query is `DELETE FROM department WHERE department.id = ${departmentId[0]}`
