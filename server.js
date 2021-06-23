@@ -154,7 +154,7 @@ const viewAndManage = () => {
 
 // DONE MUST HAVE
 const viewAllEmployees = () => {
-  const query = `SELECT employee.id AS "id", employee.first_name AS "First Name", employee.last_name AS "Last Mame", role.title AS "Title", department.name AS "Department", role.salary AS "Salary", CONCAT(manager.first_name, " ", manager.last_name) AS "Manager" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id ORDER BY id`;
+  const query = `SELECT employee.id AS "id", employee.first_name AS "First Name", employee.last_name AS "Last Name", role.title AS "Title", department.name AS "Department", role.salary AS "Salary", CONCAT(manager.first_name, " ", manager.last_name) AS "Manager" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id ORDER BY id`;
   connection.query(query, (err, result) => {
     if (err) throw err;
     console.table(result);
@@ -162,45 +162,44 @@ const viewAllEmployees = () => {
   });
 };
 
-// BONUS
-const employeesByDept = (departments) => {
-  // const query = `SELECT DISTINCT department.name FROM department ORDER BY department.id`
-  // connection.query(query, (err, result) => {
-  //   if (err) throw err;
-  //   let departmentList = []
-  //   for (let i = 0; i < result.length; i++) {
-  //     departmentList.push(result[i].department)
-  //     console.table(departmentList)
-  //   }
-  // inquirer.prompt({
-  //   type: 'list',
-  //   name: 'departments',
-  //   choices: departmentList,
-  // choices() {
-  //   const choiceArr = [];
-  //   const query = `SELECT department.name FROM department ORDER BY department.id`
-  //   connection.query(query, (err, result) => {
-  //     if (err) throw err;
-  //     result.map((department) => {
-  //       choiceArr.push(department)
-  //       console.log("Am i getting a department list??? ", (choiceArr))
-  //     })
-  //   });
-  //   return choiceArr;
-  //   },
-  //     message: "Which department do you want",
-  // })
-  // .then((answer) => {
-  //   const query = `SELECT employee.first_name AS "First Name", employee.last_name AS "Last Name", department.name AS "Deparment" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.name = ${answer.departments}`
-  //   connection.query(query, (err, result) => {
-  //     if (err) throw err;
-  //     console.table(result)
-  //     return viewAndManage();
-  //   });
-  // })
-  // connection.query('SELECT first_name AS Name, last_name, role_id FROM employees LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.id = ?', department.id (err, result) => {
-  //   if (err) throw err;
-  // })
+// BONUS HAVE
+const employeesByDept = () => {
+  connection.query(`SELECT * FROM department`, (err, result) => {
+    if (err) throw err;
+    const departmentChoices = result.map(function (department) {
+      return {
+        value: department.id,
+        name: department.name,
+      };
+    });
+    inquirer
+      .prompt([
+        {
+          name: "department",
+          type: "list",
+          choices: departmentChoices,
+          message: "Which department would you like view?",
+        },
+      ])
+      .then((answer) => {
+        connection.query(
+          `SELECT department.name AS "Deparment", CONCAT(employee.first_name, " ", employee.last_name) AS "Employee Name" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.id = ${answer.department}`,
+          // [
+          //   {
+          //     name: answer.department,
+          //   },
+          // ],
+          (err, result) => {
+            if (err) throw err;
+            console.log (" ");
+            console.table(result);
+            viewAndManage();
+          }
+          
+        );
+        
+      }); //end of first then statement
+  }); // End of department connection query
 };
 
 // BONUS
@@ -279,25 +278,25 @@ const addEmployee = () => {
           // console.log("ManagerId is what?", managerId)
           // console.log(managerId[0]);
           // result.forEach(({ id }) => {
-            // console.log(id, managerId[0]);
-            // THIS IF STATMENT WON"T STOP RUNNING - need to put something there to it only focuses on the correct one not ALL
-            // if (id == managerId[0]) { 
-            //   console.log("got id to equal managerId[0]")
-              // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
-              connection.query(
-                `INSERT into employee SET?`,
-                [
-                  {
-                    first_name: answer.first,
-                    last_name: answer.last,
-                    role_id: answer.role,
-                    manager_id: managerId[0],
-                  },
-                ],
-                (err) => {
-                  if (err) throw err;
-                }
-              );
+          // console.log(id, managerId[0]);
+          // THIS IF STATMENT WON"T STOP RUNNING - need to put something there to it only focuses on the correct one not ALL
+          // if (id == managerId[0]) {
+          //   console.log("got id to equal managerId[0]")
+          // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
+          connection.query(
+            `INSERT into employee SET?`,
+            [
+              {
+                first_name: answer.first,
+                last_name: answer.last,
+                role_id: answer.role,
+                manager_id: managerId[0],
+              },
+            ],
+            (err) => {
+              if (err) throw err;
+            }
+          );
           //   }
           // });
           console.log("Employee added successfully");
