@@ -162,7 +162,7 @@ const viewAllEmployees = () => {
   });
 };
 
-// BONUS HAVE
+// DONE BONUS HAVE
 const employeesByDept = () => {
   connection.query(`SELECT * FROM department`, (err, result) => {
     if (err) throw err;
@@ -200,7 +200,7 @@ const employeesByDept = () => {
   }); // End of department connection query
 };
 
-// BONUS
+// Done BONUS
 const employeesByManager = () => {
   // const query = `SELECT DISTINCT CONCAT(manager.first_name, " ", manager.last_name) AS "Manager" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id`;
   connection.query(`SELECT * FROM employee`, (err, result) => {
@@ -381,15 +381,15 @@ const updateEmployeeRole = () => {
           // console.log('answer.role: ', answer.role)
           let employeeId = answer.employees.split(" ");
           // console.log(employeeId[0]);
-          result.forEach(({ id }) => {
-            if (id == employeeId[0]) {
-            }
+          // result.forEach(({ id }) => {
+            // if (id == employeeId[0]) {
+            // }
 
             let roleId = answer.roles.split(" ");
 
-            result.forEach(({ id }) => {
-              if (id == roleId[0]) {
-              }
+            // result.forEach(({ id }) => {
+              // if (id == roleId[0]) {
+              // }
 
               // const query = `SELECT DISTINCT department.id FROM department WHERE department.name = ${answer.department}`
               connection.query(
@@ -407,8 +407,8 @@ const updateEmployeeRole = () => {
                   if (err) throw err;
                 }
               );
-            }); //second forEach end
-          }); //first forEach end
+            // }); //second forEach end
+          // }); //first forEach end
           console.log("Employee Role successfully updated");
           viewAndManage();
         });
@@ -427,8 +427,6 @@ const viewRoles = () => {
   const query = `SELECT role.title AS "Role Titles" FROM role ORDER BY role.id`;
   connection.query(query, (err, result) => {
     if (err) throw err;
-    // const roles = Classes.getRoles()
-    // console.table(JSON.stringify(roles))
     console.table(result);
     return viewAndManage();
   });
