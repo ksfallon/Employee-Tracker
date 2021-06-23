@@ -314,9 +314,9 @@ const addEmployee = () => {
 const removeEmployee = () => {
   connection.query(`SELECT * FROM employee`, (err, result) => {
     if (err) throw err;
-    const managerArr = [];
+    const employeeArr = [];
     result.forEach(({ first_name, last_name, id }) => {
-      managerArr.push(id + " " + first_name + " " + last_name);
+      employeeArr.push(id + " " + first_name + " " + last_name);
       // console.log(managerArr);
     });
     inquirer
@@ -325,21 +325,21 @@ const removeEmployee = () => {
           name: "employee",
           type: "list",
           message: "Which employee would you like to delete?",
-          choices: managerArr,
+          choices: employeeArr,
         },
       ])
       // end of prompt section
       .then((answer) => {
-        let managerId = answer.manager.split(" ");
+        let employeeId = answer.employee.split(" ");
         connection.query(
-          `DELETE FROM employee WHERE employee.id = ${managerId[0]}`,
+          `DELETE FROM employee WHERE employee.id = ${employeeId[0]}`,
           (err) => {
             if (err) throw err;
           }
         );
         //   }
         // });
-        console.log("Employee successfully delete");
+        console.log("Employee successfully deleted");
 
         viewAndManage();
       }); //end of first then statement
