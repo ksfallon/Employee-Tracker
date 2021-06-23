@@ -33,11 +33,11 @@ const viewAndManage = () => {
           value: "VIEW_EMPLOYEES",
         },
         {
-          name: "View All Employees By Department",
+          name: "View All Employees By Department", // DONE - BONUS
           value: "VIEW_EMPLOYEES_BY_DEPARTMENT",
         },
         {
-          name: "View All Employees By Manager",
+          name: "View All Employees By Manager", // DONE - BONUS
           value: "VIEW_EMPLOYEES_BY_MANAGER",
         },
         {
@@ -45,7 +45,7 @@ const viewAndManage = () => {
           value: "ADD_EMPLOYEE",
         },
         {
-          name: "Remove Employee",
+          name: "Remove Employee", // DONE - BONUS
           value: "REMOVE_EMPLOYEE",
         },
         {
@@ -336,7 +336,7 @@ const removeEmployee = () => {
         viewAndManage();
       }); //end of first then statement
   }); //end of second connection.query with employee
-}; //end of deleteEmployee()
+}; //end of removeEmployee()
 
 // MUST HAVE
 const updateEmployeeRole = () => {
@@ -473,7 +473,9 @@ const addRole = () => {
   });
 };
 
-const removeRole = () => {};
+const removeRole = () => {
+
+};
 
 const viewDepartments = () => {
   const query = `SELECT department.name AS "Departments" FROM department ORDER BY department.id`;
@@ -511,7 +513,37 @@ const addDepartment = () => {
     });
 };
 
-const removeDepartment = () => {};
+const removeDepartment = () => {
+  connection.query(`SELECT * FROM department`, (err, result) => {
+    if (err) throw err;
+    const departmentArr = [];
+    result.forEach(({ name, id }) => {
+      departmentArr.push(id + " " + name );
+    });
+    inquirer
+      .prompt([
+        {
+          name: "department",
+          type: "list",
+          message: "Which department would you like to remove?",
+          choices: departmentArr,
+        },
+      ]) // end of prompt section
+      .then((answer) => {
+        let departmentId = answer.department.split(" ");
+        connection.query(
+          `DELETE FROM department WHERE department.id = ${departmentId[0]}`,
+          (err) => {
+            if (err) throw err;
+          }
+        );
+
+        console.log("Employee successfully deleted");
+
+        viewAndManage();
+      }); //end of first then statement
+  }); //end of second connection.query with employee
+};
 
 // PROMPT SHOULD ALLOW USER TO DO AT LEAST:
 // 1 - ADD departments ROLES and EMPLOYEES
