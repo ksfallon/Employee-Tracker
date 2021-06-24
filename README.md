@@ -36,19 +36,40 @@ https://youtu.be/qjnVly4MVM4
 
 ## Getting Started and the Set up
 **MySQL** needed to be connected to my Employee-Tracker work, so I created two files:
-1. server.js
-2. empTrackerDB.sql
+1. **server.js**
+2. **empTrackerDB.sql**
 
-1. In my **empTrackerDBsql** file the first two lines of code are 
+**1st** in my terminal I did npm init, npm i, then imported these three modules: 
+- Imported [inquirer](https://www.npmjs.com/package/inquirer)
+- Imported [MySQL](https://www.npmjs.com/package/mysql) 
+- Imported [console.table](https://www.npmjs.com/package/console.table) 
+- <br>
+**2nd** In my **empTrackerDB.sql** file the first two lines of code are 
 `DROP DATABASE IF EXISTS emp_trackerDB;
 CREATE DATABASE emp_trackerDB;`
-- And in the **server.js** file has a const that requires mysql and a const connection that creates the mysql connection by calling on the host, port, user, my *MySQL* password and the *emp_trackerDB*
+
+- And in the **server.js** file has a const that requires mysql and a const connection that creates the mysql connection by calling on the host, port, user, my *MySQL* password and the *emp_trackerDB*.
+  - I also went ahead and create const for and required *inquirer* and *console.table*
 - Then I can start building my *emp_trackerDB* and **seed.sql** file which i'll use to add value's into my tables.
 
 2. My **empTrackerDBsql** holds my *empTrackerDB* and I need to create 3 tables within it: *employee*, *role* and *department*.
 - for each table I need to create the *keys* for my key value pairs in these arrays. I also need to do them in the correct order. *department* is the grandparent table, this is because the *role* table calls on information from it and *employee* will call on information from within *role*. They are connected by foreign keys to each other to allow this onnection call.
+- The *department* table has two keys: id and name. id is a primary key and is called as a foreign key in the roles table (rold.department_id = department.id). id is set to autoincrement so no two departments will ever have the same id. Both name and id are set to NOT NULL
+- The *role* table has four keys: id, title, salary and department_id. Then a line of code is needed to connect *role* and *department* tables at rold.department_id = department.id and this is the **FOREIGN KEY**
+`CONSTRAINT FK_department FOREIGN KEY(department_id) REFERENCES department(id) ON DELETE SET NULL`
+  - IT CAN'T BE NULL
+-again id is autoincremented, title, salary, and department_id
+- the *employee* table has five keys: id, first_name, last_name, role_id and manager_id. just like departmnet employee.role_id = role.id so a similar foriegn key is created here:
+`CONSTRAINT FK_role FOREIGN KEY(role_id) REFERENCES role(id) ON DELETE SET NULL,
+  - which calls on the role table and the id key, and the role_id is established as a FK. IT CAN'T BE NULL
+- I also created the manager_id as a foreign key even though it is within the same table. employee.manager_id = manager.id. The code is:
+`CONSTRAINT FK_employee FOREIGN KEY(manager_id) REFERENCES employee(id) ON DELETE SET NULL'
+  - So we call the employee table and call the id on that table. *manager* is our new variable or 'pseudo' table. And an employee's id is ALSO their manager.id(employee.manager_id) if ther are a manager.
+- Again,id is autoincremented, first_name, last_name, which are both NOT NULL, and FKs role_id and department_id 
+- <brb>
+3. the **seeds.sql** table for inserting values and creating key value pairs in my tables
 - 
-3. ge
+  <brb>
 4.
 
 2. Once the two are connected I can use  *MySQL* workbench as well to test out my queries and see the updated data that forms in the tables when the inquirer is run in the terminal, but that comes later
