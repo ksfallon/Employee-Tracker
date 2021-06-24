@@ -3,7 +3,7 @@ USE emp_trackerDB;
 INSERT into department (name)
 VALUE 
 ("Sales"),  --id:1
-("Engineer"), --id:2
+("Engineering"), --id:2
 ("Finance"), --id:3
 ("Legal"); --id:4
 

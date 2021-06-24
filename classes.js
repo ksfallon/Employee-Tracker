@@ -12,16 +12,16 @@ class getLists {
         const query = `SELECT role.title AS "role title" FROM role ORDER BY role.id`
         connection.query(query, (err, result) => {
           if (err) throw err;
-          let rolesARR = []
-          rolesARR = rolesARR.concat(JSON.parse(result))
+          const roleArr = [];
+          result.forEach(({ title, id }) => {
+            roleArr.push(id + " " + title );
           return rolesARR
         })
+      })
     }
 
 
-    genDepartmentList(){
-
-    }
+    genDepartmentList()
 
 
 }

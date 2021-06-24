@@ -66,7 +66,7 @@ const viewAndManage = () => {
           value: "ADD_ROLE",
         },
         {
-          name: "Remove Role",
+          name: "Remove Role", //DONE - BONUS
           value: "REMOVE_ROLE",
         },
         {
@@ -78,7 +78,7 @@ const viewAndManage = () => {
           value: "ADD_DEPARTMENT",
         },
         {
-          name: "Remove Department",
+          name: "Remove Department", //DONE - BONUS
           value: "REMOVE_DEPARTMENT",
         },
         {
@@ -162,7 +162,7 @@ const viewAllEmployees = () => {
   });
 };
 
-// DONE BONUS HAVE
+// DONE BONUS 
 const employeesByDept = () => {
   connection.query(`SELECT * FROM department`, (err, result) => {
     if (err) throw err;
@@ -200,7 +200,7 @@ const employeesByDept = () => {
   }); // End of department connection query
 };
 
-// Done BONUS
+// DONE - BONUS
 const employeesByManager = () => {
   // const query = `SELECT DISTINCT CONCAT(manager.first_name, " ", manager.last_name) AS "Manager" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id`;
   connection.query(`SELECT * FROM employee`, (err, result) => {
@@ -302,7 +302,7 @@ const addEmployee = () => {
   //end of first connection.query with role
 }; // end of the function
 
-// Bonus
+// DONE - BONUS
 const removeEmployee = () => {
   connection.query(`SELECT * FROM employee`, (err, result) => {
     if (err) throw err;
@@ -338,7 +338,7 @@ const removeEmployee = () => {
   }); //end of second connection.query with employee
 }; //end of removeEmployee()
 
-// MUST HAVE
+// DONE MUST HAVE
 const updateEmployeeRole = () => {
   connection.query(`SELECT * FROM role`, (err, result) => {
     if (err) throw err;
@@ -413,8 +413,10 @@ const updateEmployeeRole = () => {
   // })
 };
 
+
 const updateEmployeeManager = () => {};
 
+// DONE - MUST HAVE
 const viewRoles = () => {
   const query = `SELECT role.title AS "Role Titles" FROM role ORDER BY role.id`;
   connection.query(query, (err, result) => {
@@ -474,6 +476,7 @@ const addRole = () => {
   });
 };
 
+// DONE - BONUS
 const removeRole = () => {
   connection.query(`SELECT * FROM role`, (err, result) => {
     if (err) throw err;
