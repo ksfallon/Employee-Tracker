@@ -73,3 +73,8 @@ CREATE DATABASE emp_trackerDB;`
 4.
 
 2. Once the two are connected I can use  *MySQL* workbench as well to test out my queries and see the updated data that forms in the tables when the inquirer is run in the terminal, but that comes later
+    
+## LICENSE
+
+## 7. License
+Licensed under the [MIT License](https://choosealicense.com/licenses/mit/#).
