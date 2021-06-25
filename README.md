@@ -33,7 +33,7 @@ https://youtu.be/qjnVly4MVM4
 3. View employee by manager
 4. View total utilized budget by department (salary combo)
 
-## 2. Getting Started and the Set up
+## 2. Files and Modules Needed to Start
 **MySQL** needed to be connected to my Employee-Tracker work, so I created two files: **server.js** and **empTrackerDB.sql**
 
 1. in my terminal I did npm init, npm i, then imported these three modules: 
