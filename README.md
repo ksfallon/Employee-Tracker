@@ -9,32 +9,32 @@ https://youtu.be/qjnVly4MVM4
 ### **TABLE OF CONTENTS:**
 1. [Overview of Employee-Tracker](#1-overview-of-tasks)
 2. [Getting Started and the Setup](#2-files-and-modules-needed-to-start)
-3. [Creating the Server & htmlRoutes](#3-the-serverjs-and-htmlroutesjs-files)
-4. [Creating the middleware](#4-the-middlewarejs-file)
-5. [Creating the apiRoutes](#5-the-apiroutesjs-file)
-6. [Screen Shots of App with Inspect/Console](#6-screen-shots-of-app)
+3. [Creating Main function with inquirer](#3-creating-viewAndManage-using-inquirer-and-switch-cases)
+4. [Creating the connection queries](#4-Creating-the-view-connection-queries-in-JS-and-MySQL)
+5. [ADD with MySQL and JS](#5-add-an-employee-role-or-department-with-JS-and-MySQL)
+6. [UPDATE an employee's role with node js and MySQL](#6-Updating-an-employee's-role-with-node-js-and-MySQL)
 7. [License for Repository](#7-license)
 
 <br>
 <br>
 
-## Overview of Tasks
+## 1. Overview of Tasks
 - The goal is to build a system for a company to manage their employees.
 - To create this system we must use node js, MySQL, npm Inquirer, npm Console Table.
 - The database is based on 3 things: departments, roles and employees
 <br>
 - The minimum requirements are giving the user the ability to: 
-- 1. Add: employees, departments and roles
-- 2. View: employees, departments and roles
-- 3. Updae an employee's role
-- <br>
+1. Add: employees, departments and roles
+2. View: employees, departments and roles
+3. Updae an employee's role
+<br>
 - The bonus features are:
 - 1. Delete: employees, departments and roles
 - 2. Update employee's manager
 - 3. View employee by manager
 - 4. View total utilized budget by department (salary combo)
 
-## Getting Started and the Set up
+## 2. Getting Started and the Set up
 **MySQL** needed to be connected to my Employee-Tracker work, so I created two files:
 1. **server.js**
 2. **empTrackerDB.sql**
@@ -76,13 +76,115 @@ CREATE DATABASE emp_trackerDB;`
  - Again, we need to have the *department* first because *role* is depedent on *department*, *role* next and then *employee* last because it is dependent on *role*
  - the id doesn't have to be entered because it is automatically generated, but I put notes next to all of my new values in each table so i know what ID they will be.
  - I created 4 departments, 8 roles and 11 employees and gave them all the other values that I needed to have.
- - Also the managers had to be added before the other other employees, so i could give the other employees ids for their managers.
-4.
-  <brb>
-5.
+ - Also the managers had to be added before the other other employees, so I could give the other employees ids for their managers.
+4. To add them we use INSERT which designates the table you want to use and the key's. Then you have VALUE which are the values you want for each individual object. Here is an example for an employee:
+`INSERT into employee (first_name, last_name, role_id, manager_id) VALUE("Ken", "Masters", 2, 1)`
+- You can do mulitple objects they just need to be in their own set of paranthesis.
+<brb>
+5. Once my Employee Tracker files are connected to *MySQL* workbench and my database, then my tables and finally my seeds have been inserted I can test out my queries that I need to create to ADD, VIEW, replace roles and the bonus, DELETE, view employee by manager, etc.
 
-2. Once the two are connected I can use  *MySQL* workbench as well to test out my queries and see the updated data that forms in the tables when the inquirer is run in the terminal, but that comes later
+</brb>
+
+## 3. Creating viewAndManage() using inquirer and switch cases
     
+- My main function that gives the user the option to choose from all of the functions that will add and view employes, roles and departments and all my other functions is called *viewAndManage*
+- I first call it in my connection.connect which will through an error if one is encountered during the connection to **MySQL** or if no error is found than *viewAndManage* is called.
+
+1. The first part of my function is using inquirer prompt to provide a single question: 'What would you like to do?" and from there are all the choices that are given in key value pairs.
+`inquirer.prompt({
+      type: "list",
+      name: "action",
+      message: "What would you like to do?",
+      choices: [
+        { name: "View All Employees",
+          value: "VIEW_EMPLOYEES"}`
+
+2. Next is *then* that deals with the answers and the answer is run through a long set of *switch cases* 
+- *switch (answers.action)* is what moves us through the function call
+- Each question is its own *case*, and it calls on a specific function and then is followed by a *break;*. 
+- The value from the choice list is what is plugged into *case*. 
+- There is a case that ends the node js connection *connection.end()* when the case "QUIT" is called. - Also a default that will console log 'invalid action' if the answer.action is not something from the list.
+
+## 4. Creating the VIEW connection queries in JS and MySQL
+1. I focus first on my *View* functions because I just needed to display a table with *console.table*
+2. A query holds the code that is used in **MySQL** to call certain functions from the values within the tables stored there.
+- To create the table I use the 'SELECT* function because I want to select specific values from specific tables.
+- The most basic is 'view all departments' and 'view all roles' because I do not need to connect tables with primary keys. My SELECT is as follows:
+`SELECT role.title AS "Role Titles" FROM role ORDER BY role.id`
+   - I only want the titles, so i select 'role.title' and call it "Role Titles" which is the header for that column in the table. 
+   - Then I state FROM which is the *role* table and I want them in ORDER BY role.id
+   - *department* is very similar, i just want department.name and call the *department* table.
+- To get all employees I need to create JOINs and this is when I use the foreign keys.
+  - to JOIN department to roles here is my code:
+  `LEFT JOIN department ON role.department_id = department.id`
+  - which is basically saying connect these two tables on the value they share (department.id the FK)
+  - to get the manager for each employee a LEFT JOIN is needed to, and the variable 'manger' is created again:
+  `LEFT JOIN employee manager ON manager.id = employee_id`
+  - So again this pseudo manager table is created using the employee_id to create another set of ids for managers, using the same numbers. If an employee is also a manager, their personal manager.id is the same as their personal employee.id
+  - I used LEFT on all of the JOINS because _____
+3. With VIEW, The JS function is straight forward once the query is established.
+- I set my query equal to a const called 'query' and then I call it in my connection function:
+`connection.query(query, (err, result) => {
+    if (err) throw err;
+    console.table(result);
+    viewAndManage();
+  });`
+
+- the connection takes the 'query' and then calls with 'err' or 'result'. If the connection encounters an error, it will throw an error. Otherwise, it will console.table the results from the query and then it will call the function *viewAndManager()* and take the user back to the main function prompt.
+- All of the other functions have this basic part to the function:
+  `connection.query(query, (err, result) => {
+    if (err) throw err;
+  });`
+  - It establishes you are calling for a connection to **MySQL** using a 'query' and you want the 'result'. If you can't get that result, through an error.
+  -Instead of setting a const query = to your **MySQL** query, you can also just insert the **MySQL** code directly inot the connection.query funtion where 'query' is located in the paranthesis.
+
+## 5. ADD an employe, role or department with JS and MySQL
+
+1. To add to the *employee*, *role*, and *department* requires more code than just calling the query and displaying the result. It is easiest with *department* so I will show that first.
+- I need to use inquirer to ask the user "What is the new department name?" and The type this time is input.
+- in *then* whatever was input is the 'answer' and that needs to be SET into departments with connection.query.
+`INSERT into department SET?`
+- We know the 'answer' needs to be inserted into departments, but MySQL wants to know where it will be SET. So we use a key value pair object to show this:
+`{name: answer.name}`
+  - The first 'name' is the key from the deparment table, so we've established where the answer will go.
+  - The "answer.name" is the answer from the prompt questions named 'name'. This is the what that is going to be the value in our key value pair.
+  - Again the error is called, and if nothing is thrown, we console.log "Department added successfully" to allow the user to know its be added.
+2. When adding to *role* or *employee* I have to call the LEFT JOINS again, so when you create a role the user can choose the correct department id it will be placed in and for employee the correct role and manager ids will be generated.
+- For employee, I created two connection queries:
+1. calls to select from all (*) from role. This way I can display all roles and their ids as a list choice for the user.
+2. calls all from employee, so a total list of employees with their IDs are shown in a list to the user.
+- The connection queries use for loops, using 'map' and 'forEach' to get all of the information needed from the specific table, and set these arrays equal to a const (roleChoices and managerArr)
+  - In the map I make the id and role.title an object.
+  - in the forEach I pushed the id, first_name and last_name as a single string into the array.
+- In the inquirer.prompt I ask 4 questions:
+1. Employees first name which is an input.
+2. Employees last name which is an input.
+3. Ask what the employee role is, which is a list with choices from the const *roleChoices*
+4. Ask who the employee's manager is, which is a list with choices from the const *managerArr*
+- In 'then' I need to place all 4 of those answers into the employee table. 
+  - First, I need to create a new const *managerId* which is created when the answer for the question 'manager' is split, so the id, first name and last name are all their own strings in the array. 
+  - Then i call my third connection.query `INSERT into employee SET?` and I create an array with my keys - "first_name: answer.first", "last_name: answer.last", "role_id: answer.role", and "manager_id: managerId[0]"
+    - managerId is on the 0 part of the array because that is the location of the id
+- Next our error is called, if its not thrown, a console.log will say "Employee added successfully" and then **viewAndManage** is called.
+-**addRole** is very similar to **addEmployee** its just not as complicated, it only has to connection.query department before the prompt section to get department names and ids.
+
+## 6. Updating an employee's role with node js and MySQL
+- Updating an employee's role is very similar to adding an employee in many ways. 
+1. I call the same two connection queries, `SELECT * FROM employee` and `SELECT * FROM ROLE`.
+ - For these I used the *forEach* loop to create *roleArr* and *employeeArr* and push each role.id and role.title as a single string, and did the same for with the *employee* first, last names and id.
+2. The inquirer.prompt has two questions that they are both lists:
+  - Which employee would you like to update? and the choices are from the *employeeArr* array
+  - What is the new role? and the choices are from the *roleArr* array.
+3. In my *then* again I created a const to hold the answer that is split into mulitple strings: *employeeId* and *roleId*
+4. My connection query called to UPDATE employee (since it already has a role, we just want to change it) and its wants to know what to SET? and WHERE?
+  - On *employee.id* that equals *employeeId[0]*, I want to change their *employee.role_id* from the current integer to *roleId[0]*
+5. Next our error is called, if its not thrown, a console.log will say "Employee Role successfully updated" and then **viewAndManage** is called.
+  
+
+
+
+
+
 ## LICENSE
 
 ## 7. License
