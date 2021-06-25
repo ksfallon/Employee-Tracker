@@ -135,7 +135,7 @@ CREATE DATABASE emp_trackerDB;`
   - It establishes you are calling for a connection to **MySQL** using a 'query' and you want the 'result'. If you can't get that result, through an error.
   -Instead of setting a const query = to your **MySQL** query, you can also just insert the **MySQL** code directly inot the connection.query funtion where 'query' is located in the paranthesis.
 
-## 5. Add an employee, role or department with JS and MySQL
+## 5. ADD an employee, role or department with JS and MySQL
 
 1. To add to the *employee*, *role*, and *department* requires more code than just calling the query and displaying the result. It is easiest with *department* so I will show that first.
 - I need to use inquirer to ask the user "What is the new department name?" and The type this time is input.
