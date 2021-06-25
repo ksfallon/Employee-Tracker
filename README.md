@@ -12,7 +12,7 @@ https://youtu.be/qjnVly4MVM4
 3. [Creating Main function with inquirer](#3-creating-viewandmanage-using-inquirer-and-switch-cases)
 4. [Creating the connection queries](#4-creating-the-view-connection-queries-in-js-and-mysql)
 5. [ADD with MySQL and JS](#5-add-an-employee-role-or-department-with-js-and-mysql)
-6. [UPDATE an employee's role with node js and MySQL](#6-Update-an-employee's-role-with-node-js-and-MySQL)
+6. [UPDATE an employee's role with node js and MySQL](#6-update-an-employees-role-with-node-js-and-mysql)
 7. [License for Repository](#7-license)
 
 <br>
@@ -134,7 +134,7 @@ CREATE DATABASE emp_trackerDB;`
   });`
   - It establishes you are calling for a connection to **MySQL** using a 'query' and you want the 'result'. If you can't get that result, through an error.
   -Instead of setting a const query = to your **MySQL** query, you can also just insert the **MySQL** code directly inot the connection.query funtion where 'query' is located in the paranthesis.
-
+add-an-employee-role-or-department-with-js-and-mysql
 ## 5. ADD an employe, role or department with JS and MySQL
 
 1. To add to the *employee*, *role*, and *department* requires more code than just calling the query and displaying the result. It is easiest with *department* so I will show that first.
