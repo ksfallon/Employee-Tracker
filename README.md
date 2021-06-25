@@ -13,7 +13,8 @@ https://youtu.be/qjnVly4MVM4
 4. [Creating the connection queries](#4-creating-the-view-connection-queries-in-js-and-mysql)
 5. [ADD with MySQL and JS](#5-add-an-employee-role-or-department-with-js-and-mysql)
 6. [UPDATE an employee's role with node js and MySQL](#6-update-an-employees-role-with-node-js-and-mysql)
-7. [License for Repository](#7-license)
+7. [Bonus Functions](#7-bonus-functions)
+8. [License for Repository](#8-license)
 
 <br>
 
@@ -176,7 +177,16 @@ CREATE DATABASE emp_trackerDB;`
 4. My connection query called to UPDATE employee (since it already has a role, we just want to change it) and its wants to know what to SET? and WHERE?
   - On *employee.id* that equals *employeeId[0]*, I want to change their *employee.role_id* from the current integer to *roleId[0]*
 5. Next our error is called, if its not thrown, a console.log will say "Employee Role successfully updated" and then **viewAndManage** is called.
+
+## 7. Bonus Functions
+1. Employees by Deparment:
+  - The function is setup the same way at the start as addRole. 
+    - A connection query calls for all departments, they are put into a list array with map and that map is then put into the inquirer prompt.
+  - When the user choose which department they want to view it is put directly into the connection query as a variable: `SELECT department.name AS "Deparment", CONCAT(employee.first_name, " ", employee.last_name) AS "Employee Name" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id WHERE department.id = ${answer.department}`
+    - I have the department name in one column and then the employee first and last names are concated so its one columns 
+    - I do left JOINs from employee to role with FK, role to department with FKs 
+    - Most importantly  then I say I want all the SELECT variables from WHERE deparment.id = answer.deparment which is the department the user chose.
   
 
-## 7. LICENSE
+## 8. LICENSE
 Licensed under the [MIT License](https://choosealicense.com/licenses/mit/#).
