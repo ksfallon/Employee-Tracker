@@ -188,12 +188,27 @@ CREATE DATABASE emp_trackerDB;`
     - Most importantly  then I say I want all the SELECT variables from WHERE deparment.id = answer.deparment which is the department the user chose.
  <br>
  2. Employee by Manager
-  - Again the function is like addRole but I'm looking at the connection query for `SELECT * FROM employee*
-  - I use forEach this time to create a managerArr that is and array made up of single strings that contain the employees id + first name + last name
-  - The user than chooses from the list of employees, at first i had it as just the existing managers, but that can always change.
-  - in the *then* section i split the answer so it is 3 strings instead of one and it is const *managerId* and *managerId[0]* is placed into my query:
+ - Again the function is like addRole but I'm looking at the connection query for `SELECT * FROM employee*
+ - I use forEach this time to create a managerArr that is and array made up of single strings that contain the employees id + first name + last name
+ - The user than chooses from the list of employees, at first i had it as just the existing managers, but that can always change.
+ - in the *then* section i split the answer so it is 3 strings instead of one and it is const *managerId* and *managerId[0]* is placed into my query:
   `SELECT CONCAT(employee.first_name, " ", employee.last_name) AS "${managerId[1]} ${managerId[2]}'s Employees" FROM employee LEFT JOIN employee manager ON manager.id = employee.manager_id WHERE employee.manager_id = ${managerId[0]}`
-    - Again, like employee by department, 
+   - For the title of the table I wanted the manager choosen's name to be at the top thats why it is in the AS section
+   - LEFT JOIN employee on manager
+   - the variables are SELECTed WHERE employee.manager.id = managerId[0]
+  
+  3. Remove Employee
+  - This function starts out like *employeeByManager()* calling a connection query to SELECT all from employee which is made into an employee array *employeeArr* the same was as *managerArr* which is placed in the choices key of a list of employees.
+  - In the *then* section of inquirer i split the answer like all of the other functions and call on employeeId[0] in my const query:
+  `DELETE FROM employee WHERE employee.id = ${employeeId[0]}`
+    - the DELETE for **MySQL** is very straightforward. I want to delete FROM employee where employee.id equals employeeId[0].
+  
+  4. Remove Role and Remove Department
+  - They are done just like *removeEmployee* except the connection.queries are specific to those tables:
+  - Queries before inquirer.prompt: `SELECT * FROM role` and `SELECT * FROM deparment`
+  - Queries in Inquirer.then: `DELETE FROM role WHERE role.id = ${roleId[0]}` and `DELETE FROM department WHERE role.id = ${departmentId[0]}`
+  
+  
  
   
 
