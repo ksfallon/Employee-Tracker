@@ -1,9 +1,9 @@
-# Employee-Tracker
+<h1 align ="center"> Employee-Tracker </h1>
 
-Here a link to the GitHub Repo
+Link to the GitHub Repo
 https://github.com/ksfallon/Employee-Tracker
 
-Here is the link to a video reviewing the basic requirements
+Link to a video reviewing the basic requirements
 https://youtu.be/qjnVly4MVM4
 
 ### **TABLE OF CONTENTS:**
@@ -29,21 +29,19 @@ https://youtu.be/qjnVly4MVM4
 3. Updae an employee's role
 <br>
 - The bonus features are:
-- 1. Delete: employees, departments and roles
-- 2. Update employee's manager
-- 3. View employee by manager
-- 4. View total utilized budget by department (salary combo)
+1. Delete: employees, departments and roles
+2. Update employee's manager
+3. View employee by manager
+4. View total utilized budget by department (salary combo)
 
 ## 2. Getting Started and the Set up
-**MySQL** needed to be connected to my Employee-Tracker work, so I created two files:
-1. **server.js**
-2. **empTrackerDB.sql**
+**MySQL** needed to be connected to my Employee-Tracker work, so I created two files: **server.js** and **empTrackerDB.sql**
 
 1. in my terminal I did npm init, npm i, then imported these three modules: 
 - Imported [inquirer](https://www.npmjs.com/package/inquirer)
 - Imported [MySQL](https://www.npmjs.com/package/mysql) 
 - Imported [console.table](https://www.npmjs.com/package/console.table) 
-- <br>
+<br>
 2. In my **empTrackerDB.sql** file the first two lines of code are 
 `DROP DATABASE IF EXISTS emp_trackerDB;
 CREATE DATABASE emp_trackerDB;`
@@ -65,12 +63,12 @@ CREATE DATABASE emp_trackerDB;`
 - I also created the manager_id as a foreign key even though it is within the same table. employee.manager_id = manager.id. The code is:
 `CONSTRAINT FK_employee FOREIGN KEY(manager_id) REFERENCES employee(id) ON DELETE SET NULL'
   - So we call the employee table and call the id on that table. *manager* is our new variable or 'pseudo' table. And an employee's id is ALSO their manager.id(employee.manager_id) if ther are a manager.
-- Again,id is autoincremented, first_name, last_name, which are both NOT NULL, and FKs role_id and department_id 
+- Again, id is autoincremented, first_name, last_name, which are both NOT NULL, and FKs role_id and department_id 
 - Finally, to connect the tables to **MySQL** workbench before the tables but after my first two lines of code (DROP and CREATE) i have:
 `USE emp_trackerDB;`
 - And this line tells  **MySQL** to use the emp_trackerBD to create my tables. 
 - I have to do them in order: First *department*, then *role* and then *employee* because they have keys that are dependent on each other.
-- <brb>
+<brb>
 3. The **seeds.sql** table for inserting values and creating key value pairs in my tables
  - This file contained the values for *department*, *role* and *employee* for a starting place to help see how my functions and queries run.
  - Again, we need to have the *department* first because *role* is depedent on *department*, *role* next and then *employee* last because it is dependent on *role*
@@ -106,7 +104,7 @@ CREATE DATABASE emp_trackerDB;`
 - There is a case that ends the node js connection *connection.end()* when the case "QUIT" is called. - Also a default that will console log 'invalid action' if the answer.action is not something from the list.
 
 ## 4. Creating the VIEW connection queries in JS and MySQL
-1. I focus first on my *View* functions because I just needed to display a table with *console.table*
+1. I focused first on my *View* functions because I just needed to display a table with *console.table*
 2. A query holds the code that is used in **MySQL** to call certain functions from the values within the tables stored there.
 - To create the table I use the 'SELECT* function because I want to select specific values from specific tables.
 - The most basic is 'view all departments' and 'view all roles' because I do not need to connect tables with primary keys. My SELECT is as follows:
@@ -151,16 +149,16 @@ CREATE DATABASE emp_trackerDB;`
   - Again the error is called, and if nothing is thrown, we console.log "Department added successfully" to allow the user to know its be added.
 2. When adding to *role* or *employee* I have to call the LEFT JOINS again, so when you create a role the user can choose the correct department id it will be placed in and for employee the correct role and manager ids will be generated.
 - For employee, I created two connection queries:
-1. calls to select from all (*) from role. This way I can display all roles and their ids as a list choice for the user.
-2. calls all from employee, so a total list of employees with their IDs are shown in a list to the user.
+    1. calls to select from all (*) from role. This way I can display all roles and their ids as a list choice for the user.
+    2. calls all from employee, so a total list of employees with their IDs are shown in a list to the user.
 - The connection queries use for loops, using 'map' and 'forEach' to get all of the information needed from the specific table, and set these arrays equal to a const (roleChoices and managerArr)
   - In the map I make the id and role.title an object.
   - in the forEach I pushed the id, first_name and last_name as a single string into the array.
 - In the inquirer.prompt I ask 4 questions:
-1. Employees first name which is an input.
-2. Employees last name which is an input.
-3. Ask what the employee role is, which is a list with choices from the const *roleChoices*
-4. Ask who the employee's manager is, which is a list with choices from the const *managerArr*
+    1. Employees first name which is an input.
+    2. Employees last name which is an input.
+    3. Ask what the employee role is, which is a list with choices from the const *roleChoices*
+    4. Ask who the employee's manager is, which is a list with choices from the const *managerArr*
 - In 'then' I need to place all 4 of those answers into the employee table. 
   - First, I need to create a new const *managerId* which is created when the answer for the question 'manager' is split, so the id, first name and last name are all their own strings in the array. 
   - Then i call my third connection.query `INSERT into employee SET?` and I create an array with my keys - "first_name: answer.first", "last_name: answer.last", "role_id: answer.role", and "manager_id: managerId[0]"
@@ -181,11 +179,5 @@ CREATE DATABASE emp_trackerDB;`
 5. Next our error is called, if its not thrown, a console.log will say "Employee Role successfully updated" and then **viewAndManage** is called.
   
 
-
-
-
-
-## LICENSE
-
-## 7. License
+## 7. LICENSE
 Licensed under the [MIT License](https://choosealicense.com/licenses/mit/#).
