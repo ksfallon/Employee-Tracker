@@ -9,13 +9,12 @@ https://youtu.be/qjnVly4MVM4
 ### **TABLE OF CONTENTS:**
 1. [Overview of Employee-Tracker](#1-overview-of-tasks)
 2. [Getting Started and the Setup](#2-files-and-modules-needed-to-start)
-3. [Creating Main function with inquirer](#3-creating-viewAndManage-using-inquirer-and-switch-cases)
-4. [Creating the connection queries](#4-Creating-the-view-connection-queries-in-JS-and-MySQL)
-5. [ADD with MySQL and JS](#5-add-an-employee-role-or-department-with-JS-and-MySQL)
-6. [UPDATE an employee's role with node js and MySQL](#6-Updating-an-employee's-role-with-node-js-and-MySQL)
+3. [Creating Main function with inquirer](#3-creating-viewandmanage-using-inquirer-and-switch-cases)
+4. [Creating the connection queries](#4-creating-the-view-connection-queries-in-js-and-mysql)
+5. [ADD with MySQL and JS](#5-add-an-employee-role-or-department-with-js-and-mysql)
+6. [UPDATE an employee's role with node js and MySQL](#6-Update-an-employee's-role-with-node-js-and-MySQL)
 7. [License for Repository](#7-license)
 
-<br>
 <br>
 
 ## 1. Overview of Tasks
@@ -166,7 +165,7 @@ CREATE DATABASE emp_trackerDB;`
 - Next our error is called, if its not thrown, a console.log will say "Employee added successfully" and then **viewAndManage** is called.
 -**addRole** is very similar to **addEmployee** its just not as complicated, it only has to connection.query department before the prompt section to get department names and ids.
 
-## 6. Updating an employee's role with node js and MySQL
+## 6. UPDATE an employee's role with node js and MySQL
 - Updating an employee's role is very similar to adding an employee in many ways. 
 1. I call the same two connection queries, `SELECT * FROM employee` and `SELECT * FROM ROLE`.
  - For these I used the *forEach* loop to create *roleArr* and *employeeArr* and push each role.id and role.title as a single string, and did the same for with the *employee* first, last names and id.
