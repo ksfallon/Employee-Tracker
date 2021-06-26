@@ -6,6 +6,9 @@ https://github.com/ksfallon/Employee-Tracker
 Link to a video reviewing the basic requirements
 https://youtu.be/qjnVly4MVM4
 
+Link to a video reviewing the **BONUS** requirements
+https://youtu.be/-_OqtR_g-2M
+
 ### **TABLE OF CONTENTS:**
 1. [Overview of Employee-Tracker](#1-overview-of-tasks)
 2. [Getting Started and the Setup](#2-files-and-modules-needed-to-start)
