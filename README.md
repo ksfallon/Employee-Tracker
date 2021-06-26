@@ -62,8 +62,8 @@ CREATE DATABASE emp_trackerDB;`
 - The *role* table has four keys: id, title, salary and department_id. Then a line of code is needed to connect *role* and *department* tables at rold.department_id = department.id and this is the **FOREIGN KEY**
 <br>
 `CONSTRAINT FK_department FOREIGN KEY(department_id) REFERENCES department(id) ON DELETE SET NULL`
-<br>
-  - IT CAN'T BE NULL
+
+ - IT CAN'T BE NULL
 - again id is autoincremented, title, salary, and department_id
 - the *employee* table has five keys: id, first_name, last_name, role_id and manager_id. just like departmnet employee.role_id = role.id so a similar foriegn key is created here:
 `CONSTRAINT FK_role FOREIGN KEY(role_id) REFERENCES role(id) ON DELETE SET NULL,
