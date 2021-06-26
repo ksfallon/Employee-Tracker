@@ -54,12 +54,17 @@ CREATE DATABASE emp_trackerDB;`
 - Then I can start building my *emp_trackerDB* and **seed.sql** file which i'll use to add value's into my tables.
 
 3. My **empTrackerDBsql** holds my *empTrackerDB* and I need to create 3 tables within it: *employee*, *role* and *department*.
+
 - for each table I need to create the *keys* for my key value pairs in these arrays. I also need to do them in the correct order. *department* is the grandparent table, this is because the *role* table calls on information from it and *employee* will call on information from within *role*. They are connected by foreign keys to each other to allow this onnection call.
-- The *department* table has two keys: id and name. id is a primary key and is called as a foreign key in the roles table (rold.department_id = department.id). id is set to autoincrement so no two departments will ever have the same id. Both name and id are set to NOT NULL
+
+- The *department* table has two keys: id and name. id is a primary key and is called as a foreign key in the roles table (rold.department_id = department.id). id is set to autoincrement so no two departments will ever have the same id. Both name and id are set to NOT NULL.
+
 - The *role* table has four keys: id, title, salary and department_id. Then a line of code is needed to connect *role* and *department* tables at rold.department_id = department.id and this is the **FOREIGN KEY**
+<br>
 `CONSTRAINT FK_department FOREIGN KEY(department_id) REFERENCES department(id) ON DELETE SET NULL`
+<br>
   - IT CAN'T BE NULL
--again id is autoincremented, title, salary, and department_id
+- again id is autoincremented, title, salary, and department_id
 - the *employee* table has five keys: id, first_name, last_name, role_id and manager_id. just like departmnet employee.role_id = role.id so a similar foriegn key is created here:
 `CONSTRAINT FK_role FOREIGN KEY(role_id) REFERENCES role(id) ON DELETE SET NULL,
   - which calls on the role table and the id key, and the role_id is established as a FK. IT CAN'T BE NULL
@@ -72,17 +77,17 @@ CREATE DATABASE emp_trackerDB;`
 - And this line tells  **MySQL** to use the emp_trackerBD to create my tables. 
 - I have to do them in order: First *department*, then *role* and then *employee* because they have keys that are dependent on each other.
 <brb>
-3. The **seeds.sql** table for inserting values and creating key value pairs in my tables
+4. The **seeds.sql** table for inserting values and creating key value pairs in my tables
  - This file contained the values for *department*, *role* and *employee* for a starting place to help see how my functions and queries run.
  - Again, we need to have the *department* first because *role* is depedent on *department*, *role* next and then *employee* last because it is dependent on *role*
  - the id doesn't have to be entered because it is automatically generated, but I put notes next to all of my new values in each table so i know what ID they will be.
  - I created 4 departments, 8 roles and 11 employees and gave them all the other values that I needed to have.
  - Also the managers had to be added before the other other employees, so I could give the other employees ids for their managers.
-4. To add them we use INSERT which designates the table you want to use and the key's. Then you have VALUE which are the values you want for each individual object. Here is an example for an employee:
+5. To add them we use INSERT which designates the table you want to use and the key's. Then you have VALUE which are the values you want for each individual object. Here is an example for an employee:
 `INSERT into employee (first_name, last_name, role_id, manager_id) VALUE("Ken", "Masters", 2, 1)`
 - You can do mulitple objects they just need to be in their own set of paranthesis.
 <brb>
-5. Once my Employee Tracker files are connected to *MySQL* workbench and my database, then my tables and finally my seeds have been inserted I can test out my queries that I need to create to ADD, VIEW, replace roles and the bonus, DELETE, view employee by manager, etc.
+6. Once my Employee Tracker files are connected to *MySQL* workbench and my database, then my tables and finally my seeds have been inserted I can test out my queries that I need to create to ADD, VIEW, replace roles and the bonus, DELETE, view employee by manager, etc.
 
 </brb>
 
